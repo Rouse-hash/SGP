@@ -49,7 +49,7 @@ public class Contrato {
     // La columna "id_Empleado" en contrato apunta a "id_Empleado" en empleado
     
     @ManyToOne(fetch = FetchType.EAGER)
-@JoinColumn(name = "id_empleado", referencedColumnName = "id_Empleado")
+@JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
 private Empleado empleado;
 
     // ====================
