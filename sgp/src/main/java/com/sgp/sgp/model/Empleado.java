@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.CascadeType;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.sql.Date;
 
@@ -18,6 +19,8 @@ import jakarta.persistence.Column;
     @Entity indica que esta clase
     representa una tabla en la base de datos.
 */
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 @Entity
 @Table(name = "empleado")
 public class Empleado {
