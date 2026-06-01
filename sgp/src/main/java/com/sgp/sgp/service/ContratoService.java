@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /*
- * @Service indica que esta clase pertenece a la capa de servicio.
- * Aquí se implementa la lógica de negocio para manejar contratos.
+ * Clase de servicio para manejar la lógica de negocio de Contrato.
  * El Controller se comunica con esta capa, y esta capa con el Repository.
  */
 @Service
