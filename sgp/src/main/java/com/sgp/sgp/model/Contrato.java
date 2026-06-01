@@ -4,6 +4,8 @@ package com.sgp.sgp.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
@@ -50,6 +52,7 @@ public class Contrato {
     
     @ManyToOne(fetch = FetchType.EAGER)
 @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 private Empleado empleado;
 
     // ====================

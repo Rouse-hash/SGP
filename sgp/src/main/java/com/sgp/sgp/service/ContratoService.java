@@ -1,5 +1,6 @@
 package com.sgp.sgp.service;
 
+import com.sgp.sgp.dto.ContratoDTO;
 import com.sgp.sgp.model.Contrato;
 import com.sgp.sgp.repository.ContratoRepository;
 import org.springframework.stereotype.Service;
@@ -64,4 +65,28 @@ public class ContratoService {
         }
         return false;
     }
+    /*
+    Método para convertir un Contrato en ContratoDTO.
+    Se usa para controlar qué datos del empleado se devuelven en la respuesta JSON.
+*/
+public ContratoDTO convertirADTO(Contrato contrato) {
+    ContratoDTO dto = new ContratoDTO();
+    dto.setIdContrato(contrato.getIdContrato());
+    dto.setTipoContrato(contrato.getTipoContrato());
+    dto.setFechaInicio(contrato.getFechaInicio());
+    dto.setFechaFin(contrato.getFechaFin());
+    dto.setBigDecimalsalario(contrato.getSalario());
+
+    // Datos del empleado asociados al contrato
+    if (contrato.getEmpleado() != null) {
+        dto.setIdEmpleado(contrato.getEmpleado().getIdEmpleado());
+        dto.setNombre(contrato.getEmpleado().getNombre());
+        dto.setApellidos(contrato.getEmpleado().getApellidos());
+        dto.setTipoDocumento(contrato.getEmpleado().getTipoDocumento());
+        dto.setNumeroDocumento(contrato.getEmpleado().getNumeroDocumento());
+    }
+
+    return dto;
+}
+
 }
