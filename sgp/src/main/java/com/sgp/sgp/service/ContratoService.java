@@ -75,7 +75,8 @@ public ContratoDTO convertirADTO(Contrato contrato) {
     dto.setTipoContrato(contrato.getTipoContrato());
     dto.setFechaInicio(contrato.getFechaInicio());
     dto.setFechaFin(contrato.getFechaFin());
-    dto.setBigDecimalsalario(contrato.getSalario());
+    dto.setSalario(contrato.getSalario());
+
 
     // Datos del empleado asociados al contrato
     if (contrato.getEmpleado() != null) {

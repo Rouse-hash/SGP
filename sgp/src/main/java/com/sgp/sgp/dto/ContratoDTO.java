@@ -9,13 +9,14 @@ import java.util.Date;
     Aquí incluimos los campos del contrato y los del empleado que queremos mostrar.
 */
 public class ContratoDTO {
+
     private Integer idContrato;
     private String tipoContrato;
     private Date fechaInicio;
     private Date fechaFin;
-    private Double salario;
+    private BigDecimal salario;
 
-    // Campos del empleado que queremos mostrar
+    // Datos del empleado asociados al contrato
     private Long idEmpleado;
     private String nombre;
     private String apellidos;
@@ -23,38 +24,74 @@ public class ContratoDTO {
     private String numeroDocumento;
 
     // Getters y Setters
-    public Integer getIdContrato() { return idContrato; }
-    public void setIdContrato(Integer idContrato) { this.idContrato = idContrato; }
+    public Integer getIdContrato() {
+        return idContrato;
+    }
+    public void setIdContrato(Integer idContrato) {
+        this.idContrato = idContrato;
+    }
 
-    public String getTipoContrato() { return tipoContrato; }
-    public void setTipoContrato(String tipoContrato) { this.tipoContrato = tipoContrato; }
+    public String getTipoContrato() {
+        return tipoContrato;
+    }
+    public void setTipoContrato(String tipoContrato) {
+        this.tipoContrato = tipoContrato;
+    }
 
-    public Date getFechaInicio() { return fechaInicio; }
-    public void setFechaInicio(Date fechaInicio) { this.fechaInicio = fechaInicio; }
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
 
-    public Date getFechaFin() { return fechaFin; }
-    public void setFechaFin(Date fechaFin) { this.fechaFin = fechaFin; }
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
 
-    public Double getSalario() { return salario; }
-    public void setSalario(Double salario) { this.salario = salario; }
+    public BigDecimal getSalario() {
+        return salario;
+    }
+    public void setSalario(BigDecimal salario) {
+        this.salario = salario;
+    }
 
-    public Long getIdEmpleado() { return idEmpleado; }
-    public void setIdEmpleado(Long idEmpleado) { this.idEmpleado = idEmpleado; }
+    public Long getIdEmpleado() {
+        return idEmpleado;
+    }
+    public void setIdEmpleado(Long idEmpleado) {
+        this.idEmpleado = idEmpleado;
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public String getNombre() {
+        return nombre;
+    }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public String getApellidos() { return apellidos; }
-    public void setApellidos(String apellidos) { this.apellidos = apellidos; }
+    public String getApellidos() {
+        return apellidos;
+    }
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
 
-    public String getTipoDocumento() { return tipoDocumento; }
-    public void setTipoDocumento(String tipoDocumento) { this.tipoDocumento = tipoDocumento; }
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
 
-    public String getNumeroDocumento() { return numeroDocumento; }
-    public void setNumeroDocumento(String numeroDocumento) { this.numeroDocumento = numeroDocumento; }
-    public void setBigDecimalsalario(BigDecimal salario2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setBigDecimalsalario'");
+    public String getNumeroDocumento() {
+        return numeroDocumento;
+    }
+    public void setNumeroDocumento(String numeroDocumento) {
+        this.numeroDocumento = numeroDocumento;
     }
 }
 
