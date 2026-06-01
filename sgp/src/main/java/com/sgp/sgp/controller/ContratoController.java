@@ -1,30 +1,12 @@
 package com.sgp.sgp.controller;
 
-import com.sgp.sgp.repository.ContratoRepository;
-// Importa List para manejar colecciones
-import java.util.List;
-
-// Importa Optional para manejar búsquedas que pueden devolver o no un resultado
-import java.util.Optional;
-
-// Importa ResponseEntity para construir respuestas HTTP más controladas
-import org.springframework.http.ResponseEntity;
-
-// Importa las anotaciones de Spring Boot para manejar solicitudes HTTP
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-// Importa la entidad Contrato
 import com.sgp.sgp.model.Contrato;
-
-// Importa la capa Service de Contrato
 import com.sgp.sgp.service.ContratoService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 /*
     @RestController indica que esta clase será un controlador REST.
@@ -40,9 +22,8 @@ import com.sgp.sgp.service.ContratoService;
 @RequestMapping("/api/contratos")
 public class ContratoController {
 
-    private final ContratoRepository contratoRepository;
     /*
-        Se declara una variable final de ContratoService.
+        Se declara una variable final de tipo ContratoService.
         El Controller se comunica con la capa Service,
         nunca directamente con el Repository.
     */
@@ -50,11 +31,10 @@ public class ContratoController {
 
     /*
         Constructor del Controller.
-        Spring Boot inyecta automáticamente una instancia de ContratoService.
+        Spring Boot inyecta automáticamente la dependencia ContratoService.
     */
-    public ContratoController(ContratoService contratoService, ContratoRepository contratoRepository) {
+    public ContratoController(ContratoService contratoService) {
         this.contratoService = contratoService;
-        this.contratoRepository = contratoRepository;
     }
 
     /*
@@ -63,7 +43,7 @@ public class ContratoController {
     */
     @GetMapping
     public List<Contrato> listarContratos() {
-        return contratoRepository.findAll();
+        return contratoService.listarContratos();
     }
 
     /*
@@ -74,11 +54,8 @@ public class ContratoController {
     public ResponseEntity<Contrato> buscarContratoPorId(@PathVariable Integer idContrato) {
         Optional<Contrato> contrato = contratoService.buscarContratoPorId(idContrato);
 
-        if (contrato.isPresent()) {
-            return ResponseEntity.ok(contrato.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return contrato.map(ResponseEntity::ok)
+                       .orElse(ResponseEntity.notFound().build());
     }
 
     /*
@@ -96,8 +73,8 @@ public class ContratoController {
     */
     @PutMapping("/{idContrato}")
     public ResponseEntity<Contrato> actualizarContrato(
-        @PathVariable Integer idContrato,
-        @RequestBody Contrato contrato) {
+            @PathVariable Integer idContrato,
+            @RequestBody Contrato contrato) {
 
         Optional<Contrato> contratoExistente = contratoService.buscarContratoPorId(idContrato);
 
@@ -129,4 +106,3 @@ public class ContratoController {
         }
     }
 }
-
