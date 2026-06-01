@@ -2,7 +2,8 @@ package com.sgp.sgp.repository;
 
 // Importa JpaRepository, que proporciona métodos CRUD automáticos
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 // Importa la anotación Repository para indicar que esta interfaz pertenece a la capa de acceso a datos
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +26,8 @@ import  com.sgp.sgp.model.Contrato;
 */
 public interface ContratoRepository extends JpaRepository<Contrato, Integer> {
 
+    @Query("SELECT c FROM Contrato c JOIN FETCH c.empleado WHERE c.idContrato = :id")
+Contrato findByIdWithEmpleado(@Param("id") Integer id);
     /*
         Al extender JpaRepository<Cliente, Long>, esta interfaz
         hereda métodos CRUD listos para usar, como:
