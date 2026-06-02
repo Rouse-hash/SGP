@@ -1,32 +1,41 @@
 package com.sgp.sgp.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
+import java.sql.Date;
 
 @Entity
+@Table(name = "contrato")
 public class Contrato {
 
-    // Identificador único del contrato (tipo Long)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_contrato") // PK en la tabla contrato
     private Long idContrato;
 
-    // Ejemplo de atributos adicionales
+    @Column(name = "tipo_contrato", length = 50)
     private String tipoContrato;
-    private String fechaInicio;
-    private String fechaFin;
 
-    // Relación muchos-a-uno con Empleado
-    // Cada contrato pertenece a un empleado
+    @Column(name = "fecha_inicio")
+    private Date fechaInicio;
+
+    @Column(name = "fecha_fin")
+    private Date fechaFin;
+
+    @Column(name = "salario")
+    private Double salario;
+
+    /*
+        Relación con Empleado:
+        - Muchos contratos pertenecen a un solo empleado.
+        - Usamos @JsonBackReference para evitar ciclos infinitos
+          cuando devolvemos empleados con contratos.
+    */
     @ManyToOne
     @JoinColumn(name = "id_empleado", nullable = false)
+    @com.fasterxml.jackson.annotation.JsonBackReference
     private Empleado empleado;
 
-    // Getters y Setters
+    // --- Getters y Setters ---
     public Long getIdContrato() {
         return idContrato;
     }
@@ -43,20 +52,28 @@ public class Contrato {
         this.tipoContrato = tipoContrato;
     }
 
-    public String getFechaInicio() {
+    public Date getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(String fechaInicio) {
+    public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public String getFechaFin() {
+    public Date getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(String fechaFin) {
+    public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
+    }
+
+    public Double getSalario() {
+        return salario;
+    }
+
+    public void setSalario(Double salario) {
+        this.salario = salario;
     }
 
     public Empleado getEmpleado() {
@@ -67,3 +84,4 @@ public class Contrato {
         this.empleado = empleado;
     }
 }
+

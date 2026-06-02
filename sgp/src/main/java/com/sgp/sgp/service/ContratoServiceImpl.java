@@ -9,15 +9,25 @@ import com.sgp.sgp.repository.ContratoRepository;
 import com.sgp.sgp.repository.EmpleadoRepository;
 
 /*
-    Implementación de la lógica de negocio
-    para Contrato.
+    Implementación de la lógica de negocio para Contrato.
 */
 @Service
 public class ContratoServiceImpl implements ContratoService {
 
+    /*
+        Repository de contratos.
+    */
     private final ContratoRepository contratoRepository;
+
+    /*
+        Repository de empleados.
+        Se necesita para validar que el empleado exista.
+    */
     private final EmpleadoRepository empleadoRepository;
 
+    /*
+        Constructor para inyección de dependencias.
+    */
     public ContratoServiceImpl(ContratoRepository contratoRepository,
                                EmpleadoRepository empleadoRepository) {
         this.contratoRepository = contratoRepository;
@@ -72,15 +82,14 @@ public class ContratoServiceImpl implements ContratoService {
     */
     @Override
     public Contrato actualizarContrato(Long idContrato, Contrato contrato) {
-        Contrato contratoExistente = buscarContratoPorId(idContrato);
+        Contrato existente = buscarContratoPorId(idContrato);
 
-        // Aquí puedes actualizar los campos que necesites
-        contratoExistente.setTipoContrato(contrato.getTipoContrato());
-        contratoExistente.setFechaInicio(contrato.getFechaInicio());
-        contratoExistente.setFechaFin(contrato.getFechaFin());
-        contratoExistente.setEmpleado(contrato.getEmpleado());
+        existente.setTipoContrato(contrato.getTipoContrato());
+        existente.setFechaInicio(contrato.getFechaInicio());
+        existente.setFechaFin(contrato.getFechaFin());
+        existente.setSalario(contrato.getSalario());
 
-        return contratoRepository.save(contratoExistente);
+        return contratoRepository.save(existente);
     }
 
     /*
@@ -88,7 +97,8 @@ public class ContratoServiceImpl implements ContratoService {
     */
     @Override
     public void eliminarContrato(Long idContrato) {
-        Contrato contratoExistente = buscarContratoPorId(idContrato);
-        contratoRepository.delete(contratoExistente);
+        Contrato existente = buscarContratoPorId(idContrato);
+        contratoRepository.delete(existente);
     }
 }
+
