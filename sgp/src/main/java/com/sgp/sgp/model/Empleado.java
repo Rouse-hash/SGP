@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.CascadeType;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.sql.Date;
@@ -57,6 +58,7 @@ public class Empleado {
     private String estadoCivil;
 
  // Relación uno-a-muchos con Contrato
+    @JsonIgnore   
     @OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL, orphanRemoval = true)
 private List<Contrato> contratos;
 

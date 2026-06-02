@@ -3,9 +3,7 @@ package com.sgp.sgp.model;
 // Importa las clases necesarias
 import java.math.BigDecimal;
 import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
@@ -49,11 +47,12 @@ public class Contrato {
 
     // Relación muchos-a-uno con la tabla empleado
     // La columna "id_Empleado" en contrato apunta a "id_Empleado" en empleado
+    // Ignora propiedades internas de Hibernate y evita ciclos infinitos
     
-    @ManyToOne(fetch = FetchType.EAGER)
-@JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-private Empleado empleado;
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "contratos"})
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_empleado", nullable = false)
+    private Empleado empleado;
 
     // ====================
     // GETTERS Y SETTERS
