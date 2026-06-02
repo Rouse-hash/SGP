@@ -1,18 +1,13 @@
 package com.sgp.sgp.controller;
 
-import com.sgp.sgp.dto.ContratoDTO;
+import java.util.List;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import com.sgp.sgp.model.Contrato;
 import com.sgp.sgp.service.ContratoService;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-/*
-    @RestController indica que esta clase será un controlador REST.
-    Recibirá peticiones HTTP y devolverá respuestas en formato JSON.
-*/
 @RestController
-@RequestMapping("/api/contratos")
+@RequestMapping("/contratos")
 public class ContratoController {
 
     private final ContratoService contratoService;
@@ -21,35 +16,40 @@ public class ContratoController {
         this.contratoService = contratoService;
     }
 
-    /*
-     * Método para listar todos los contratos.
-     * Ruta: GET http://localhost:8080/api/contratos
-     */
-    @GetMapping
-    public List<ContratoDTO> listarContratos() {
-        return contratoService.listarContratos()
-                .stream()
-                .map(contratoService::convertirADTO)
-                .toList();
+    // Busca un contrato por su ID
+    @GetMapping("/{idContrato}")
+    public ResponseEntity<Contrato> buscarContratoPorId(@PathVariable Long idContrato) {
+        Contrato contrato = contratoService.buscarContratoPorId(idContrato);
+        return ResponseEntity.ok(contrato);
     }
 
-    /*
-     * Método para buscar un contrato por ID.
-     * Ruta: GET http://localhost:8080/api/contratos/{id}
-     */
-   @GetMapping("/{id}")
-public ContratoDTO obtenerContrato(@PathVariable Integer id) {
-    Contrato contrato = contratoService.obtenerContratoConEmpleado(id);
-    return contratoService.convertirADTO(contrato);
-}
+    // Lista contratos asociados a un empleado
+    @GetMapping("/empleado/{idEmpleado}")
+    public ResponseEntity<List<Contrato>> listarContratosPorEmpleado(@PathVariable Long idEmpleado) {
+        List<Contrato> contratos = contratoService.listarContratosPorEmpleado(idEmpleado);
+        return ResponseEntity.ok(contratos);
+    }
 
-    /*
-     * Método para guardar un nuevo contrato.
-     * Ruta: POST http://localhost:8080/api/contratos
-     */
-    @PostMapping
-    public ContratoDTO guardarContrato(@RequestBody Contrato contrato) {
-        Contrato contratoGuardado = contratoService.guardarContrato(contrato);
-        return contratoService.convertirADTO(contratoGuardado);
+    // Crea un contrato asociado a un empleado
+    @PostMapping("/empleado/{idEmpleado}")
+    public ResponseEntity<Contrato> crearContrato(@PathVariable Long idEmpleado, @RequestBody Contrato contrato) {
+        Contrato nuevoContrato = contratoService.crearContrato(idEmpleado, contrato);
+        return ResponseEntity.ok(nuevoContrato);
+    }
+
+    // Actualiza un contrato existente
+    @PutMapping("/{idContrato}")
+    public ResponseEntity<Contrato> actualizarContrato(@PathVariable Long idContrato, @RequestBody Contrato contrato) {
+        Contrato contratoActualizado = contratoService.actualizarContrato(idContrato, contrato);
+        return ResponseEntity.ok(contratoActualizado);
+    }
+
+    // Elimina un contrato por su ID
+    @DeleteMapping("/{idContrato}")
+    public ResponseEntity<Void> eliminarContrato(@PathVariable Long idContrato) {
+        contratoService.eliminarContrato(idContrato);
+        return ResponseEntity.noContent().build();
     }
 }
+
+
