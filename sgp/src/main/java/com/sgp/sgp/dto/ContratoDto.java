@@ -1,8 +1,18 @@
+// Paquete donde se ubican los DTOs
 package com.sgp.sgp.dto;
 
+// DTO (Data Transfer Object) para representar contratos en las respuestas del backend.
+// Se utiliza para enviar solo la información necesaria al frontend,
+// evitando exponer directamente la entidad JPA completa.
 public class ContratoDto {
-    private String nombreEmpleado; // solo el nombre del empleado
+
+    // Nombre completo del empleado (nombre + apellidos)
+    private String nombreEmpleado;
+
+    // Tipo de contrato (Ej: Fijo, Temporal, etc.)
     private String tipoContrato;
+
+    // Fecha de inicio del contrato
     private String fechaInicio;
 
     // --- Getters y Setters ---
@@ -10,6 +20,7 @@ public class ContratoDto {
         return nombreEmpleado;
     }
 
+    // Setter que recibe nombre y apellidos concatenados desde el Service
     public void setNombreEmpleado(String nombreEmpleado) {
         this.nombreEmpleado = nombreEmpleado;
     }
@@ -30,4 +41,5 @@ public class ContratoDto {
         this.fechaInicio = fechaInicio;
     }
 }
+
 
