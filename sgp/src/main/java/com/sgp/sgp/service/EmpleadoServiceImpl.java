@@ -10,12 +10,14 @@ import com.sgp.sgp.repository.EmpleadoRepository;
 
 /*
     Implementación de la lógica de negocio para Empleado usando DTO.
+    Se encarga de convertir entidades Empleado en objetos EmpleadoDto
+    y de manejar las operaciones CRUD con validaciones.
 */
 @Service
 public class EmpleadoServiceImpl implements EmpleadoService {
 
     /*
-        Repository de empleados.
+        Repository de empleados para acceder a la base de datos.
     */
     private final EmpleadoRepository empleadoRepository;
 
@@ -27,7 +29,8 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     /*
-        Convierte una entidad Empleado en EmpleadoDTO.
+        Convierte una entidad Empleado en EmpleadoDto.
+        Solo se envían los campos definidos en el DTO.
     */
     private EmpleadoDto convertirADTO(Empleado empleado) {
         EmpleadoDto dto = new EmpleadoDto();
@@ -73,6 +76,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     /*
         Actualiza un empleado existente y devuelve su DTO.
+        Se valida que el empleado exista antes de modificarlo.
     */
     @Override
     public EmpleadoDto actualizarEmpleado(Long idEmpleado, Empleado empleado) {
@@ -80,19 +84,20 @@ public class EmpleadoServiceImpl implements EmpleadoService {
                 .orElseThrow(() -> new RecursoNoEncontradoException(
                         "Empleado no encontrado con ID: " + idEmpleado));
 
+        // Actualizar datos básicos
         existente.setNombre(empleado.getNombre());
         existente.setApellidos(empleado.getApellidos());
         existente.setTipoDocumento(empleado.getTipoDocumento());
         existente.setNumeroDocumento(empleado.getNumeroDocumento());
-        existente.setFechaNacimiento(empleado.getFechaNacimiento());
-        existente.setEstadoCivil(empleado.getEstadoCivil());
 
+        // Guardar cambios
         Empleado actualizado = empleadoRepository.save(existente);
         return convertirADTO(actualizado);
     }
 
     /*
         Elimina un empleado por ID.
+        Si no existe, lanza excepción.
     */
     @Override
     public void eliminarEmpleado(Long idEmpleado) {
@@ -102,4 +107,5 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         empleadoRepository.delete(existente);
     }
 }
+
 
