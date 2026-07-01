@@ -50,7 +50,7 @@ public class ContratoServiceImpl implements ContratoService {
 
     @Override
     public List<ContratoDto> listarContratosPorEmpleado(Long idEmpleado) {
-        return contratoRepository.findByEmpleadoId(idEmpleado)
+        return contratoRepository.findByEmpleado_IdEmpleado(idEmpleado) // 
                 .stream()
                 .map(this::convertirADTO)
                 .collect(Collectors.toList());
@@ -98,6 +98,3 @@ public class ContratoServiceImpl implements ContratoService {
         contratoRepository.delete(existente);
     }
 }
-
-
-
