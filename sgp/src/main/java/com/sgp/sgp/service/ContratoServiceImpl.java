@@ -100,24 +100,20 @@ public class ContratoServiceImpl implements ContratoService {
         Actualizar un contrato existente.
         Se valida tanto el contrato como el empleado.
     */
-    @Override
-    public ContratoDto actualizarContrato(Long idContrato, Long idEmpleado, Contrato contrato) {
-        // Validar que el contrato exista
-        Contrato existente = contratoRepository.findById(idContrato)
-                .orElseThrow(() -> new RecursoNoEncontradoException(
-                        "Contrato no encontrado con ID: " + idContrato));
+   @Override
+public ContratoDto actualizarContrato(Long idContrato, Long idEmpleado, Contrato contrato) {
+    Contrato existente = contratoRepository.findById(idContrato)
+            .orElseThrow(() -> new RecursoNoEncontradoException(
+                    "Contrato no encontrado con ID: " + idContrato));
 
-        // Validar que el empleado exista
-        Empleado empleado = empleadoRepository.findById(idEmpleado)
-                .orElseThrow(() -> new RecursoNoEncontradoException(
-                        "Empleado no encontrado con ID: " + idEmpleado));
+    Empleado empleado = empleadoRepository.findById(idEmpleado)
+            .orElseThrow(() -> new RecursoNoEncontradoException(
+                    "Empleado no encontrado con ID: " + idEmpleado));
 
         // Actualizar datos del contrato
-        existente.setTipoContrato(contrato.getTipoContrato());
-        existente.setFechaInicio(contrato.getFechaInicio());
-        existente.setFechaFin(contrato.getFechaFin());
-        existente.setSalario(contrato.getSalario());
-        existente.setEmpleado(empleado);
+       existente.setTipoContrato(contrato.getTipoContrato());
+    existente.setFechaInicio(contrato.getFechaInicio());
+    existente.setEmpleado(empleado);
 
         // Guardar cambios
         Contrato actualizado = contratoRepository.save(existente);
