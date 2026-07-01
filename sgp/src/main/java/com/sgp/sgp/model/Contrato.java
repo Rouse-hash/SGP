@@ -30,7 +30,7 @@ public class Contrato {
         - Usamos @JsonBackReference para evitar ciclos infinitos
           cuando devolvemos empleados con contratos.
     */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_empleado", nullable = false)
     @com.fasterxml.jackson.annotation.JsonBackReference
     private Empleado empleado;
