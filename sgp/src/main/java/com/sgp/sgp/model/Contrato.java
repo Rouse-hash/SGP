@@ -1,87 +1,49 @@
 package com.sgp.sgp.model;
 
-import jakarta.persistence.*;
-import java.sql.Date;
+import jakarta.persistence.*;          // Para las anotaciones JPA
+import java.time.LocalDate;           // IMPORTANTE: aquí está el import que faltaba
+                                       // LocalDate vive en java.time
 
 @Entity
-@Table(name = "contrato")
 public class Contrato {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_contrato") // PK en la tabla contrato
     private Long idContrato;
 
-    @Column(name = "tipo_contrato", length = 50)
     private String tipoContrato;
 
-    @Column(name = "fecha_inicio")
-    private Date fechaInicio;
+    // Usamos LocalDate para fechas
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
 
-    @Column(name = "fecha_fin")
-    private Date fechaFin;
-
-    @Column(name = "salario")
     private Double salario;
 
-    /*
-        Relación con Empleado:
-        - Muchos contratos pertenecen a un solo empleado.
-        - Usamos @JsonBackReference para evitar ciclos infinitos
-          cuando devolvemos empleados con contratos.
-    */
+    // Relación con empleado
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_empleado", nullable = false)
-    @com.fasterxml.jackson.annotation.JsonBackReference
+    @JoinColumn(name = "id_empleado")
     private Empleado empleado;
 
-    // --- Getters y Setters ---
-    public Long getIdContrato() {
-        return idContrato;
-    }
+    // Getters y setters
+    public Long getIdContrato() { return idContrato; }
+    public void setIdContrato(Long idContrato) { this.idContrato = idContrato; }
 
-    public void setIdContrato(Long idContrato) {
-        this.idContrato = idContrato;
-    }
+    public String getTipoContrato() { return tipoContrato; }
+    public void setTipoContrato(String tipoContrato) { this.tipoContrato = tipoContrato; }
 
-    public String getTipoContrato() {
-        return tipoContrato;
-    }
+    public LocalDate getFechaInicio() { return fechaInicio; }
+    public void setFechaInicio(LocalDate fechaInicio) { this.fechaInicio = fechaInicio; }
 
-    public void setTipoContrato(String tipoContrato) {
-        this.tipoContrato = tipoContrato;
-    }
+    public LocalDate getFechaFin() { return fechaFin; }
+    public void setFechaFin(LocalDate fechaFin) { this.fechaFin = fechaFin; }
 
-    public Date getFechaInicio() {
-        return fechaInicio;
-    }
+    public Double getSalario() { return salario; }
+    public void setSalario(Double salario) { this.salario = salario; }
 
-    public void setFechaInicio(Date fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
-
-    public Date getFechaFin() {
-        return fechaFin;
-    }
-
-    public void setFechaFin(Date fechaFin) {
-        this.fechaFin = fechaFin;
-    }
-
-    public Double getSalario() {
-        return salario;
-    }
-
-    public void setSalario(Double salario) {
-        this.salario = salario;
-    }
-
-    public Empleado getEmpleado() {
-        return empleado;
-    }
-
-    public void setEmpleado(Empleado empleado) {
-        this.empleado = empleado;
-    }
+    public Empleado getEmpleado() { return empleado; }
+    public void setEmpleado(Empleado empleado) { this.empleado = empleado; }
 }
+
+
+
 

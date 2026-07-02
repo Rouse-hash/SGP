@@ -1,17 +1,15 @@
 package com.sgp.sgp.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
-import com.sgp.sgp.dto.EmpleadoDto;
 import com.sgp.sgp.exception.RecursoNoEncontradoException;
 import com.sgp.sgp.model.Empleado;
 import com.sgp.sgp.repository.EmpleadoRepository;
 
 /*
-    Implementación de la lógica de negocio para Empleado usando DTO.
-    Se encarga de convertir entidades Empleado en objetos EmpleadoDto
-    y de manejar las operaciones CRUD con validaciones.
+    Implementación de la lógica de negocio para Empleado
+    trabajando directamente con la entidad JPA.
+    Se encarga de manejar las operaciones CRUD con validaciones.
 */
 @Service
 public class EmpleadoServiceImpl implements EmpleadoService {
@@ -29,57 +27,38 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     /*
-        Convierte una entidad Empleado en EmpleadoDto.
-        Solo se envían los campos definidos en el DTO.
-    */
-    private EmpleadoDto convertirADTO(Empleado empleado) {
-        EmpleadoDto dto = new EmpleadoDto();
-        dto.setIdEmpleado(empleado.getIdEmpleado());
-        dto.setNombre(empleado.getNombre());
-        dto.setApellidos(empleado.getApellidos());
-        dto.setTipoDocumento(empleado.getTipoDocumento());
-        dto.setNumeroDocumento(empleado.getNumeroDocumento());
-        return dto;
-    }
-
-    /*
-        Lista todos los empleados registrados en formato DTO.
+        Lista todos los empleados registrados en la base de datos.
     */
     @Override
-    public List<EmpleadoDto> listarEmpleados() {
-        return empleadoRepository.findAll()
-                .stream()
-                .map(this::convertirADTO)
-                .collect(Collectors.toList());
+    public List<Empleado> listarEmpleados() {
+        return empleadoRepository.findAll();
     }
 
     /*
-        Busca un empleado por su ID y lo devuelve como DTO.
+        Busca un empleado por su ID.
         Si no existe, lanza una excepción personalizada.
     */
     @Override
-    public EmpleadoDto buscarEmpleadoPorId(Long idEmpleado) {
-        Empleado empleado = empleadoRepository.findById(idEmpleado)
+    public Empleado buscarEmpleadoPorId(Long idEmpleado) {
+        return empleadoRepository.findById(idEmpleado)
                 .orElseThrow(() -> new RecursoNoEncontradoException(
                         "Empleado no encontrado con ID: " + idEmpleado));
-        return convertirADTO(empleado);
     }
 
     /*
-        Crea un nuevo empleado y devuelve su DTO.
+        Crea un nuevo empleado.
     */
     @Override
-    public EmpleadoDto crearEmpleado(Empleado empleado) {
-        Empleado nuevo = empleadoRepository.save(empleado);
-        return convertirADTO(nuevo);
+    public Empleado crearEmpleado(Empleado empleado) {
+        return empleadoRepository.save(empleado);
     }
 
     /*
-        Actualiza un empleado existente y devuelve su DTO.
+        Actualiza un empleado existente.
         Se valida que el empleado exista antes de modificarlo.
     */
     @Override
-    public EmpleadoDto actualizarEmpleado(Long idEmpleado, Empleado empleado) {
+    public Empleado actualizarEmpleado(Long idEmpleado, Empleado empleado) {
         Empleado existente = empleadoRepository.findById(idEmpleado)
                 .orElseThrow(() -> new RecursoNoEncontradoException(
                         "Empleado no encontrado con ID: " + idEmpleado));
@@ -89,10 +68,11 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         existente.setApellidos(empleado.getApellidos());
         existente.setTipoDocumento(empleado.getTipoDocumento());
         existente.setNumeroDocumento(empleado.getNumeroDocumento());
+        existente.setFechaNacimiento(empleado.getFechaNacimiento());
+        existente.setEstadoCivil(empleado.getEstadoCivil());
 
         // Guardar cambios
-        Empleado actualizado = empleadoRepository.save(existente);
-        return convertirADTO(actualizado);
+        return empleadoRepository.save(existente);
     }
 
     /*
@@ -107,5 +87,6 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         empleadoRepository.delete(existente);
     }
 }
+
 
 

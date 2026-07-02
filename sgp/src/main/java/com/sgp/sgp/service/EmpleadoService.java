@@ -1,38 +1,44 @@
 package com.sgp.sgp.service;
 
 import java.util.List;
-import com.sgp.sgp.dto.EmpleadoDto;
 import com.sgp.sgp.model.Empleado;
 
 /*
-    Interfaz que define las operaciones del módulo Empleado usando DTO.
+    Interfaz que define las operaciones del módulo Empleado
+    trabajando directamente con la entidad JPA.
 */
 public interface EmpleadoService {
 
     /*
-        Lista todos los empleados en formato DTO.
+        Lista todos los empleados.
+        Ejemplo: GET /api/empleados
     */
-    List<EmpleadoDto> listarEmpleados();
+    List<Empleado> listarEmpleados();
 
     /*
-        Busca un empleado por ID y lo devuelve como DTO.
+        Busca un empleado por ID.
+        Ejemplo: GET /api/empleados/5
     */
-    EmpleadoDto buscarEmpleadoPorId(Long idEmpleado);
+    Empleado buscarEmpleadoPorId(Long idEmpleado);
 
     /*
-        Crea un nuevo empleado y devuelve su DTO.
+        Crea un nuevo empleado.
+        Ejemplo: POST /api/empleados
     */
-    EmpleadoDto crearEmpleado(Empleado empleado);
+    Empleado crearEmpleado(Empleado empleado);
 
     /*
-        Actualiza un empleado existente y devuelve su DTO.
+        Actualiza un empleado existente.
+        Ejemplo: PUT /api/empleados/5
     */
-    EmpleadoDto actualizarEmpleado(Long idEmpleado, Empleado empleado);
+    Empleado actualizarEmpleado(Long idEmpleado, Empleado empleado);
 
     /*
         Elimina un empleado por ID.
+        Ejemplo: DELETE /api/empleados/5
     */
     void eliminarEmpleado(Long idEmpleado);
 }
+
 
 

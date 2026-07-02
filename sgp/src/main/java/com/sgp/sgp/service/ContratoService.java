@@ -1,44 +1,51 @@
 package com.sgp.sgp.service;
 
 import java.util.List;
-import com.sgp.sgp.dto.ContratoDto;
 import com.sgp.sgp.model.Contrato;
 
 /*
-    Interfaz que define las operaciones del módulo Contrato usando DTO.
+    Interfaz que define las operaciones del módulo Contrato
+    trabajando directamente con la entidad JPA.
 */
 public interface ContratoService {
 
     /*
-        Lista todos los contratos en formato DTO.
+        Lista todos los contratos.
+        Ejemplo: GET /api/contratos
     */
-    List<ContratoDto> listarContratos();
+    List<Contrato> listarContratos();
 
     /*
-        Busca un contrato por ID y lo devuelve como DTO.
+        Busca un contrato por ID.
+        Ejemplo: GET /api/contratos/5
     */
-    ContratoDto buscarContratoPorId(Long idContrato);
+    Contrato buscarContratoPorId(Long idContrato);
 
     /*
-        Lista contratos por empleado en formato DTO.
+        Lista contratos asociados a un empleado.
+        Ejemplo: GET /api/contratos/empleado/3
     */
-    List<ContratoDto> listarContratosPorEmpleado(Long idEmpleado);
+    List<Contrato> listarContratosPorEmpleado(Long idEmpleado);
 
     /*
-        Crea un contrato asociado a un empleado existente y devuelve su DTO.
+        Crea un contrato asociado a un empleado existente.
+        Ejemplo: POST /api/contratos/empleado/3
     */
-    ContratoDto crearContrato(Long idEmpleado, Contrato contrato);
+    Contrato crearContrato(Long idEmpleado, Contrato contrato);
 
     /*
-        Actualiza un contrato existente y devuelve su DTO.
+        Actualiza un contrato existente.
+        Ejemplo: PUT /api/contratos/10
     */
-    ContratoDto actualizarContrato(Long idContrato, Long idEmpleado, Contrato contrato);
+    Contrato actualizarContrato(Long idContrato, Long idEmpleado, Contrato contrato);
 
     /*
         Elimina un contrato por ID.
+        Ejemplo: DELETE /api/contratos/10
     */
     void eliminarContrato(Long idContrato);
 }
+
 
 
 

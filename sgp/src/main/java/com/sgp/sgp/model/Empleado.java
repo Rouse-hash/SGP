@@ -5,30 +5,42 @@ import java.sql.Date;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/*
+    Entidad JPA que representa la tabla 'empleado' en la base de datos.
+    Aquí se incluyen todos los campos, aunque no todos se envíen al frontend.
+    El DTO (EmpleadoDto) se encarga de filtrar qué información viaja a la interfaz.
+*/
 @Entity
 @Table(name = "empleado")
 public class Empleado {
 
+    // Identificador único del empleado (PK con auto_increment)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_Empleado") // coincide con la columna en MySQL
     private Long idEmpleado;
 
+    // Nombre del empleado
     @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
 
+    // Apellidos del empleado
     @Column(name = "apellidos", nullable = false, length = 100)
     private String apellidos;
 
+    // Tipo de documento (CC, TI, Pasaporte, etc.)
     @Column(name = "tipo_documento", length = 45)
     private String tipoDocumento;
 
+    // Número de documento
     @Column(name = "numero_documento", length = 20)
     private String numeroDocumento;
 
+    // Fecha de nacimiento (se guarda en BD pero no se envía al DTO)
     @Column(name = "fecha_nacimiento")
     private Date fechaNacimiento;
 
+    // Estado civil (se guarda en BD pero no se envía al DTO)
     @Column(name = "estado_civil", length = 20)
     private String estadoCivil;
 
@@ -37,8 +49,11 @@ public class Empleado {
         - Un empleado puede tener varios contratos.
         - Usamos @JsonIgnore para evitar el error de LazyInitialization
           cuando devolvemos empleados en JSON.
+        - CascadeType.ALL y orphanRemoval permiten que si se elimina
+          un empleado, también se eliminen sus contratos asociados.
     */
-    @OneToMany(mappedBy = "empleado", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "empleado", fetch = FetchType.LAZY,
+               cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Contrato> contratos;
 
@@ -107,5 +122,3 @@ public class Empleado {
         this.contratos = contratos;
     }
 }
-
-

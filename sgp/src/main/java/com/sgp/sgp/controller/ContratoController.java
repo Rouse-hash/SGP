@@ -1,100 +1,83 @@
 package com.sgp.sgp.controller;
 
-import java.util.List;
+import com.sgp.sgp.model.Contrato;
+import com.sgp.sgp.model.Empleado;
+import com.sgp.sgp.repository.ContratoRepository;
+import com.sgp.sgp.repository.EmpleadoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.sgp.sgp.dto.ContratoDto;   // Importamos el DTO
-import com.sgp.sgp.model.Contrato;   // La entidad se usa solo como entrada
-import com.sgp.sgp.service.ContratoService;
+import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173")
-/*
-    Controlador REST para manejar las operaciones
-    relacionadas con los contratos usando DTO.
-*/
+@CrossOrigin(origins = "http://localhost:5173") // Permite que React consuma los endpoints
 @RestController
 @RequestMapping("/api/contratos")
 public class ContratoController {
 
-    private final ContratoService contratoService;
+    private final ContratoRepository contratoRepository;
+    private final EmpleadoRepository empleadoRepository;
 
-    /*
-        Constructor para inyección de dependencias.
-    */
-    public ContratoController(ContratoService contratoService) {
-        this.contratoService = contratoService;
+    // ✅ Inyección por constructor
+    public ContratoController(ContratoRepository contratoRepository,
+                              EmpleadoRepository empleadoRepository) {
+        this.contratoRepository = contratoRepository;
+        this.empleadoRepository = empleadoRepository;
     }
 
-    /*
-        Lista todos los contratos en formato DTO.
-        Ejemplo: GET /api/contratos
-    */
     @GetMapping
-    public ResponseEntity<List<ContratoDto>> listarContratos() {
-        List<ContratoDto> contratos = contratoService.listarContratos();
-        return ResponseEntity.ok(contratos);
+    public List<Contrato> listarContratos() {
+        return contratoRepository.findAll();
     }
-
-    /*
-        Busca un contrato por su ID y lo devuelve como DTO.
-        Ejemplo: GET /api/contratos/10
-    */
-    @GetMapping("/{idContrato}")
-    public ResponseEntity<ContratoDto> buscarContratoPorId(@PathVariable Long idContrato) {
-        ContratoDto contrato = contratoService.buscarContratoPorId(idContrato);
-        return ResponseEntity.ok(contrato);
-    }
-
-    /*
-        Lista contratos asociados a un empleado específico en formato DTO.
-        Ejemplo: GET /api/contratos/empleado/5
-    */
-    @GetMapping("/empleado/{idEmpleado}")
-    public ResponseEntity<List<ContratoDto>> listarContratosPorEmpleado(@PathVariable Long idEmpleado) {
-        List<ContratoDto> contratos = contratoService.listarContratosPorEmpleado(idEmpleado);
-        return ResponseEntity.ok(contratos);
-    }
-
-    /*
-        Crea un contrato asociado a un empleado existente.
-        Recibe la entidad completa en el cuerpo de la petición,
-        pero devuelve solo el DTO.
-        Ejemplo: POST /api/contratos/empleado/5
-    */
+    // ✅ Crear contrato asociado a un empleado
     @PostMapping("/empleado/{idEmpleado}")
-    public ResponseEntity<ContratoDto> crearContrato(@PathVariable Long idEmpleado, @RequestBody Contrato contrato) {
-        ContratoDto nuevoContrato = contratoService.crearContrato(idEmpleado, contrato);
-        return ResponseEntity.ok(nuevoContrato);
-    }
-
-    /*
-        Actualiza un contrato existente asociado a un empleado.
-        Recibe la entidad completa en el cuerpo de la petición,
-        pero devuelve solo el DTO.
-        Ejemplo: PUT /api/contratos/10/empleado/5
-    */
-    @PutMapping("/{idContrato}/empleado/{idEmpleado}")
-    public ResponseEntity<ContratoDto> actualizarContrato(
-            @PathVariable Long idContrato,
+    public ResponseEntity<Contrato> crearContrato(
             @PathVariable Long idEmpleado,
             @RequestBody Contrato contrato) {
 
-        ContratoDto contratoActualizado = contratoService.actualizarContrato(idContrato, idEmpleado, contrato);
-        return ResponseEntity.ok(contratoActualizado);
+        // Buscar empleado por ID
+        Empleado empleado = empleadoRepository.findById(idEmpleado)
+                .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
+
+        // Asignar el objeto empleado completo al contrato
+        contrato.setEmpleado(empleado);
+
+        // Guardar contrato en BD
+        Contrato nuevoContrato = contratoRepository.save(contrato);
+
+        return ResponseEntity.ok(nuevoContrato);
     }
 
-    /*
-        Elimina un contrato por su ID.
-        Ejemplo: DELETE /api/contratos/10
-        No devuelve contenido, solo código 204 (No Content).
-    */
+    // ✅ Actualizar contrato existente
+    @PutMapping("/{idContrato}")
+    @Transactional
+    public ResponseEntity<Contrato> actualizarContrato(
+            @PathVariable Long idContrato,
+            @RequestBody Contrato contratoActualizado) {
+
+        Contrato contrato = contratoRepository.findByIdWithEmpleado(idContrato);
+        if (contrato == null) {
+            throw new RuntimeException("Contrato no encontrado");
+        }
+
+        contrato.setTipoContrato(contratoActualizado.getTipoContrato());
+        contrato.setFechaInicio(contratoActualizado.getFechaInicio());
+        contrato.setFechaFin(contratoActualizado.getFechaFin());
+        contrato.setSalario(contratoActualizado.getSalario());
+
+        return ResponseEntity.ok(contrato);
+    }
+
+    // ✅ Eliminar contrato
     @DeleteMapping("/{idContrato}")
     public ResponseEntity<Void> eliminarContrato(@PathVariable Long idContrato) {
-        contratoService.eliminarContrato(idContrato);
+        contratoRepository.deleteById(idContrato);
         return ResponseEntity.noContent().build();
     }
 }
+
+
 
 
 
