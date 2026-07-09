@@ -107,4 +107,6 @@ public interface UsuarioService {
      * @return Optional<Usuario>.
      */
     Optional<Usuario> buscarPorCorreo(String correo);
+
+    Usuario findByCorreo(String correo);
 }
