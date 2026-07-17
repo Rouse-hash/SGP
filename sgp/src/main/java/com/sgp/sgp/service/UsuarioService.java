@@ -108,5 +108,4 @@ public interface UsuarioService {
      */
     Optional<Usuario> buscarPorCorreo(String correo);
 
-    Usuario findByCorreo(String correo);
 }

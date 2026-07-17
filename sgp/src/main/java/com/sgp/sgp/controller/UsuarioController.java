@@ -1,27 +1,15 @@
 package com.sgp.sgp.controller;
 
-// Importa la entidad Usuario
+import com.sgp.sgp.model.Empleado;
 import com.sgp.sgp.model.Usuario;
-
-// Importa la interfaz del servicio que contiene la lógica de negocio
 import com.sgp.sgp.service.UsuarioService;
-
-// Importa DTOs para el login y registro
 import com.sgp.sgp.dto.LoginRequest;
 import com.sgp.sgp.dto.LoginResponse;
 import com.sgp.sgp.dto.RegisterRequest;
-
-// Importa la utilidad JWT
 import com.sgp.sgp.util.JwtUtil;
-
-// Permite validar automáticamente los datos recibidos en el cuerpo de la petición
 import jakarta.validation.Valid;
-
 import org.springframework.http.HttpStatus;
-// Clase utilizada para construir respuestas HTTP personalizadas
 import org.springframework.http.ResponseEntity;
-
-// Importa las anotaciones necesarias para construir un controlador REST
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -112,8 +100,9 @@ public class UsuarioController {
     public ResponseEntity<?> crearUsuario(@Valid @RequestBody RegisterRequest req) {
 
         Usuario usuario = new Usuario();
-        usuario.setNombres(req.getNombres());
-        usuario.setApellidos(req.getApellidos());
+        Empleado empleado = new Empleado();
+        empleado.setIdEmpleado(req.getIdEmpleado());
+        usuario.setEmpleado(empleado);
         usuario.setCorreo(req.getCorreo());
         usuario.setPassword(req.getPassword());
         usuario.setRol(req.getRol());

@@ -70,6 +70,12 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Starter de seguridad Spring Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
         <!-- Validaciones con Jakarta Bean Validation -->
         <dependency>
             <groupId>jakarta.validation</groupId>

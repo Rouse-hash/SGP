@@ -1,14 +1,12 @@
 package com.sgp.sgp.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class RegisterRequest {
 
-    @NotBlank
-    private String nombres;
-
-    @NotBlank
-    private String apellidos;
+    @NotNull
+    private Long idEmpleado;
 
     @NotBlank
     private String correo;
@@ -21,28 +19,19 @@ public class RegisterRequest {
 
     public RegisterRequest() {}
 
-    public RegisterRequest(String nombres, String apellidos, String correo, String password, String rol) {
-        this.nombres = nombres;
-        this.apellidos = apellidos;
+    public RegisterRequest(Long idEmpleado, String correo, String password, String rol) {
+        this.idEmpleado = idEmpleado;
         this.correo = correo;
         this.password = password;
         this.rol = rol;
     }
 
-    public String getNombres() {
-        return nombres;
+    public Long getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+    public void setIdEmpleado(Long idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     public String getCorreo() {
