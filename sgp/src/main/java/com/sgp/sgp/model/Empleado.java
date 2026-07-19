@@ -2,6 +2,7 @@ package com.sgp.sgp.model;
 
 import jakarta.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -55,7 +56,7 @@ public class Empleado {
     @OneToMany(mappedBy = "empleado", fetch = FetchType.LAZY,
                cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<Contrato> contratos;
+    private List<Contrato> contratos = new ArrayList<>();
 
     // --- Getters y Setters ---
     public Long getIdEmpleado() {

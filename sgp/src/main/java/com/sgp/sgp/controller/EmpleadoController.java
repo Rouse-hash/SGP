@@ -1,33 +1,37 @@
 package com.sgp.sgp.controller;
 
 import com.sgp.sgp.model.Empleado;
-import com.sgp.sgp.repository.EmpleadoRepository;
+import com.sgp.sgp.service.EmpleadoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-@CrossOrigin(origins = "http://localhost:5173") // Permite que React consuma los endpoints
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/empleados")
 public class EmpleadoController {
 
-    private final EmpleadoRepository empleadoRepository;
+    private final EmpleadoService empleadoService;
 
-    // ✅ Inyección por constructor (mejor práctica)
-    public EmpleadoController(EmpleadoRepository empleadoRepository) {
-        this.empleadoRepository = empleadoRepository;
+    public EmpleadoController(EmpleadoService empleadoService) {
+        this.empleadoService = empleadoService;
     }
 
     @GetMapping
     public List<Empleado> listarEmpleados() {
-        return empleadoRepository.findAll();
+        return empleadoService.listarEmpleados();
+    }
+
+    @GetMapping("/{idEmpleado}")
+    public ResponseEntity<Empleado> buscarEmpleadoPorId(@PathVariable Long idEmpleado) {
+        Empleado empleado = empleadoService.buscarEmpleadoPorId(idEmpleado);
+        return ResponseEntity.ok(empleado);
     }
 
     @PostMapping
     public Empleado crearEmpleado(@RequestBody Empleado empleado) {
-        return empleadoRepository.save(empleado);
+        return empleadoService.crearEmpleado(empleado);
     }
 
     @PutMapping("/{idEmpleado}")
@@ -35,23 +39,13 @@ public class EmpleadoController {
             @PathVariable Long idEmpleado,
             @RequestBody Empleado empleadoActualizado) {
 
-        Empleado empleado = empleadoRepository.findById(idEmpleado)
-                .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
-
-        empleado.setNombre(empleadoActualizado.getNombre());
-        empleado.setApellidos(empleadoActualizado.getApellidos());
-        empleado.setTipoDocumento(empleadoActualizado.getTipoDocumento());
-        empleado.setNumeroDocumento(empleadoActualizado.getNumeroDocumento());
-        empleado.setFechaNacimiento(empleadoActualizado.getFechaNacimiento());
-        empleado.setEstadoCivil(empleadoActualizado.getEstadoCivil());
-
-        Empleado guardado = empleadoRepository.save(empleado);
-        return ResponseEntity.ok(guardado);
+        Empleado actualizado = empleadoService.actualizarEmpleado(idEmpleado, empleadoActualizado);
+        return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{idEmpleado}")
     public ResponseEntity<Void> eliminarEmpleado(@PathVariable Long idEmpleado) {
-        empleadoRepository.deleteById(idEmpleado);
+        empleadoService.eliminarEmpleado(idEmpleado);
         return ResponseEntity.noContent().build();
     }
 }

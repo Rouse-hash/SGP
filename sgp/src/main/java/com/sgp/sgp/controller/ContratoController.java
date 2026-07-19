@@ -30,6 +30,15 @@ public class ContratoController {
     public List<Contrato> listarContratos() {
         return contratoRepository.findAll();
     }
+
+    @GetMapping("/{idContrato}")
+    public ResponseEntity<Contrato> buscarContratoPorId(@PathVariable Long idContrato) {
+        Contrato contrato = contratoRepository.findByIdWithEmpleado(idContrato);
+        if (contrato == null) {
+            throw new RuntimeException("Contrato no encontrado con ID: " + idContrato);
+        }
+        return ResponseEntity.ok(contrato);
+    }
     // ✅ Crear contrato asociado a un empleado
     @PostMapping("/empleado/{idEmpleado}")
     public ResponseEntity<Contrato> crearContrato(

@@ -1,8 +1,8 @@
 package com.sgp.sgp.model;
 
-import jakarta.persistence.*;          // Para las anotaciones JPA
-import java.time.LocalDate;           // IMPORTANTE: aquí está el import que faltaba
-                                       // LocalDate vive en java.time
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 public class Contrato {
@@ -22,6 +22,7 @@ public class Contrato {
     // Relación con empleado
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_empleado")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Empleado empleado;
 
     // Getters y setters
