@@ -4,6 +4,7 @@ import com.sgp.sgp.model.Empleado;
 import com.sgp.sgp.model.Usuario;
 import com.sgp.sgp.repository.EmpleadoRepository;
 import com.sgp.sgp.repository.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,11 +16,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final EmpleadoRepository empleadoRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UsuarioServiceImpl(UsuarioRepository usuarioRepository,
-                              EmpleadoRepository empleadoRepository) {
+                              EmpleadoRepository empleadoRepository,
+                              PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.empleadoRepository = empleadoRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -40,6 +44,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         Empleado empleado = empleadoRepository.findById(usuario.getEmpleado().getIdEmpleado())
                 .orElseThrow(() -> new RuntimeException("Empleado no encontrado con ID: " + usuario.getEmpleado().getIdEmpleado()));
         usuario.setEmpleado(empleado);
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         return usuarioRepository.save(usuario);
     }
 
@@ -54,7 +59,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         existente.setEmpleado(empleado);
         existente.setCorreo(usuario.getCorreo());
-        existente.setPassword(usuario.getPassword());
+        existente.setPassword(passwordEncoder.encode(usuario.getPassword()));
         existente.setRol(usuario.getRol());
         existente.setActivo(usuario.getActivo());
 
@@ -74,6 +79,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional(readOnly = true)
     public Optional<Usuario> buscarPorCorreo(String correo) {
         return usuarioRepository.findByCorreo(correo);
+    }
+
+    @Override
+    @Transactional
+    public Usuario guardarUsuarioMigrado(Usuario usuario) {
+        return usuarioRepository.save(usuario);
     }
 }
 

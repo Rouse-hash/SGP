@@ -49,6 +49,7 @@ public class NominaServiceImpl implements NominaService {
 
         nomina.setEmpleado(empleado);
         nomina.setContrato(contrato);
+        nomina.setTotalPagado(calcularTotal(nomina));
 
         return nominaRepository.save(nomina);
     }
@@ -70,7 +71,7 @@ public class NominaServiceImpl implements NominaService {
         existente.setSalarioBase(nomina.getSalarioBase());
         existente.setDeducciones(nomina.getDeducciones());
         existente.setBonificaciones(nomina.getBonificaciones());
-        existente.setTotalPagado(nomina.getTotalPagado());
+        existente.setTotalPagado(calcularTotal(nomina));
         existente.setEstado(nomina.getEstado());
         existente.setDepartamento(nomina.getDepartamento());
         existente.setMunicipio(nomina.getMunicipio());
@@ -97,6 +98,13 @@ public class NominaServiceImpl implements NominaService {
     @Transactional(readOnly = true)
     public List<Nomina> listarPorMunicipio(String municipio) {
         return nominaRepository.findByMunicipio(municipio);
+    }
+
+    private Double calcularTotal(Nomina nomina) {
+        double base = nomina.getSalarioBase() != null ? nomina.getSalarioBase() : 0;
+        double ded = nomina.getDeducciones() != null ? nomina.getDeducciones() : 0;
+        double bon = nomina.getBonificaciones() != null ? nomina.getBonificaciones() : 0;
+        return base + bon - ded;
     }
 }
 

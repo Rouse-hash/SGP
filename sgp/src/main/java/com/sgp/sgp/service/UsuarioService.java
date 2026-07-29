@@ -108,4 +108,6 @@ public interface UsuarioService {
      */
     Optional<Usuario> buscarPorCorreo(String correo);
 
+    Usuario guardarUsuarioMigrado(Usuario usuario);
+
 }

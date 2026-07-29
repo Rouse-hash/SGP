@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Query;
+
 @Repository
 public interface NominaRepository extends JpaRepository<Nomina, Long> {
 
@@ -22,4 +24,10 @@ public interface NominaRepository extends JpaRepository<Nomina, Long> {
     List<Nomina> findByMunicipio(String municipio);
 
     boolean existsByEmpleadoIdEmpleadoAndMunicipio(Long idEmpleado, String municipio);
+
+    @Query("SELECT COALESCE(SUM(n.totalPagado), 0) FROM Nomina n")
+    Double sumTotalPagado();
+
+    @EntityGraph(attributePaths = {"empleado", "contrato"})
+    List<Nomina> findByEmpleadoIdEmpleado(Long idEmpleado);
 }

@@ -15,6 +15,7 @@ public interface ContratoRepository extends JpaRepository<Contrato, Long> {
      * Esto genera automáticamente la consulta:
      * SELECT * FROM contrato WHERE id_empleado = ?
      */
+    @EntityGraph(attributePaths = "empleado")
     List<Contrato> findByEmpleado_IdEmpleado(Long idEmpleado);
 
     /*

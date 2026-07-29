@@ -3,12 +3,10 @@ package com.sgp.sgp.controller;
 import com.sgp.sgp.model.Empleado;
 import com.sgp.sgp.model.Usuario;
 import com.sgp.sgp.service.UsuarioService;
-import com.sgp.sgp.dto.LoginRequest;
 import com.sgp.sgp.dto.LoginResponse;
 import com.sgp.sgp.dto.RegisterRequest;
 import com.sgp.sgp.util.JwtUtil;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -113,18 +111,6 @@ public class UsuarioController {
         LoginResponse response = new LoginResponse(token, guardado.getCorreo(), guardado.getRol(), "Usuario registrado exitosamente");
         return ResponseEntity.ok(response);
     }
-
-   // Login de usuario con JWT
-@PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-    Usuario encontrado = usuarioService.buscarPorCorreo(loginRequest.getCorreo()).orElse(null);
-    if (encontrado != null && encontrado.getPassword().equals(loginRequest.getPassword())) {
-        String token = jwtUtil.generateToken(encontrado.getCorreo(), encontrado.getRol());
-        LoginResponse response = new LoginResponse(token, encontrado.getCorreo(), encontrado.getRol(), "Login exitoso");
-        return ResponseEntity.ok(response);
-    }
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
-}
 
     /**
      * Actualiza la información de un usuario existente.
