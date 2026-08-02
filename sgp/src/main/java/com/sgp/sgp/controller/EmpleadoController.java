@@ -8,7 +8,10 @@ import com.sgp.sgp.repository.ContratoRepository;
 import com.sgp.sgp.repository.EmpleadoRepository;
 import com.sgp.sgp.service.ArchivoService;
 import com.sgp.sgp.service.EmpleadoService;
+import com.sgp.sgp.service.SesionService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,37 +25,79 @@ public class EmpleadoController {
     private final EmpleadoRepository empleadoRepository;
     private final ContratoRepository contratoRepository;
     private final ArchivoService archivoService;
+    private final SesionService sesionService;
 
     public EmpleadoController(EmpleadoService empleadoService,
                               EmpleadoRepository empleadoRepository,
                               ContratoRepository contratoRepository,
-                              ArchivoService archivoService) {
+                              ArchivoService archivoService,
+                              SesionService sesionService) {
         this.empleadoService = empleadoService;
         this.empleadoRepository = empleadoRepository;
         this.contratoRepository = contratoRepository;
         this.archivoService = archivoService;
+        this.sesionService = sesionService;
     }
 
     @GetMapping
-    public List<Empleado> listarEmpleados() {
+    public List<Empleado> listarEmpleados(Authentication authentication) {
+        if (!sesionService.esAdmin(authentication)) {
+            return sesionService.empleadoActual(authentication)
+                    .map(List::of)
+                    .orElse(List.of());
+        }
         return empleadoService.listarEmpleados();
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<Empleado> obtenerMiEmpleado(Authentication authentication) {
+        return sesionService.empleadoActual(authentication)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/{idEmpleado}")
-    public ResponseEntity<Empleado> buscarEmpleadoPorId(@PathVariable Long idEmpleado) {
+    public ResponseEntity<Empleado> buscarEmpleadoPorId(@PathVariable Long idEmpleado,
+                                                        Authentication authentication) {
+        if (!sesionService.esAdmin(authentication)) {
+            Long miId = sesionService.empleadoActual(authentication)
+                    .map(Empleado::getIdEmpleado)
+                    .orElse(null);
+            if (miId == null || !miId.equals(idEmpleado)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
         Empleado empleado = empleadoService.buscarEmpleadoPorId(idEmpleado);
         return ResponseEntity.ok(empleado);
     }
 
     @GetMapping("/documento/{numeroDocumento}")
-    public ResponseEntity<Empleado> buscarPorDocumento(@PathVariable String numeroDocumento) {
+    public ResponseEntity<Empleado> buscarPorDocumento(@PathVariable String numeroDocumento,
+                                                       Authentication authentication) {
+        if (!sesionService.esAdmin(authentication)) {
+            String miDocumento = sesionService.empleadoActual(authentication)
+                    .map(Empleado::getNumeroDocumento)
+                    .orElse(null);
+            if (miDocumento == null || !miDocumento.equals(numeroDocumento)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
         return empleadoRepository.findByNumeroDocumento(numeroDocumento)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}/resumen")
-    public ResponseEntity<ResumenEmpleadoDTO> obtenerResumen(@PathVariable Long id) {
+    public ResponseEntity<ResumenEmpleadoDTO> obtenerResumen(@PathVariable Long id,
+                                                             Authentication authentication) {
+        if (!sesionService.esAdmin(authentication)) {
+            Long miId = sesionService.empleadoActual(authentication)
+                    .map(Empleado::getIdEmpleado)
+                    .orElse(null);
+            if (miId == null || !miId.equals(id)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
         Empleado empleado = empleadoService.buscarEmpleadoPorId(id);
         List<Contrato> contratos = contratoRepository.findByEmpleado_IdEmpleado(id);
         List<ArchivoEmpleado> archivos = archivoService.listarArchivos(id);

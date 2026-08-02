@@ -2,10 +2,13 @@ package com.sgp.sgp.controller;
 
 import com.sgp.sgp.model.ArchivoEmpleado;
 import com.sgp.sgp.service.ArchivoService;
+import com.sgp.sgp.service.SesionService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,9 +20,11 @@ import java.util.List;
 public class ArchivoController {
 
     private final ArchivoService archivoService;
+    private final SesionService sesionService;
 
-    public ArchivoController(ArchivoService archivoService) {
+    public ArchivoController(ArchivoService archivoService, SesionService sesionService) {
         this.archivoService = archivoService;
+        this.sesionService = sesionService;
     }
 
     @PostMapping("/empleado/{idEmpleado}")
@@ -33,7 +38,16 @@ public class ArchivoController {
     }
 
     @GetMapping("/empleado/{idEmpleado}")
-    public ResponseEntity<List<ArchivoEmpleado>> listarArchivos(@PathVariable Long idEmpleado) {
+    public ResponseEntity<List<ArchivoEmpleado>> listarArchivos(@PathVariable Long idEmpleado,
+                                                                Authentication authentication) {
+        if (!sesionService.esAdmin(authentication)) {
+            Long miId = sesionService.empleadoActual(authentication)
+                    .map(e -> e.getIdEmpleado())
+                    .orElse(null);
+            if (miId == null || !miId.equals(idEmpleado)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
         return ResponseEntity.ok(archivoService.listarArchivos(idEmpleado));
     }
 

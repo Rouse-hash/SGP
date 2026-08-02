@@ -15,6 +15,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     @EntityGraph(attributePaths = "empleado")
     Optional<Usuario> findById(Long id);
 
+    @EntityGraph(attributePaths = "empleado")
     Optional<Usuario> findByCorreo(String correo);
 
     boolean existsByCorreo(String correo);

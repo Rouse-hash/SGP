@@ -2,8 +2,11 @@ package com.sgp.sgp.controller;
 
 import com.sgp.sgp.model.Nomina;
 import com.sgp.sgp.service.NominaService;
+import com.sgp.sgp.service.SesionService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,9 +17,11 @@ import java.util.List;
 public class NominaController {
 
     private final NominaService nominaService;
+    private final SesionService sesionService;
 
-    public NominaController(NominaService nominaService) {
+    public NominaController(NominaService nominaService, SesionService sesionService) {
         this.nominaService = nominaService;
+        this.sesionService = sesionService;
     }
 
     /*
@@ -24,7 +29,10 @@ public class NominaController {
      * GET /api/nominas
      */
     @GetMapping
-    public List<Nomina> listarNominas() {
+    public List<Nomina> listarNominas(Authentication authentication) {
+        if (!sesionService.esAdmin(authentication)) {
+            return nominasPropias(authentication);
+        }
         return nominaService.listarNominas();
     }
 
@@ -33,7 +41,13 @@ public class NominaController {
      * GET /api/nominas/{idNomina}
      */
     @GetMapping("/{idNomina}")
-    public ResponseEntity<Nomina> buscarPorId(@PathVariable Long idNomina) {
+    public ResponseEntity<Nomina> buscarPorId(@PathVariable Long idNomina,
+                                              Authentication authentication) {
+        if (!sesionService.esAdmin(authentication)) {
+            if (!esNominaPropia(authentication, idNomina)) {
+                return ResponseEntity.notFound().build();
+            }
+        }
         return nominaService.buscarPorId(idNomina)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -76,8 +90,10 @@ public class NominaController {
      * GET /api/nominas/departamento/{departamento}
      */
     @GetMapping("/departamento/{departamento}")
-    public List<Nomina> listarPorDepartamento(@PathVariable String departamento) {
-        return nominaService.listarPorDepartamento(departamento);
+    public List<Nomina> listarPorDepartamento(@PathVariable String departamento,
+                                              Authentication authentication) {
+        List<Nomina> resultado = nominaService.listarPorDepartamento(departamento);
+        return filtrarSiEmpleado(authentication, resultado);
     }
 
     /*
@@ -85,7 +101,64 @@ public class NominaController {
      * GET /api/nominas/municipio/{municipio}
      */
     @GetMapping("/municipio/{municipio}")
-    public List<Nomina> listarPorMunicipio(@PathVariable String municipio) {
-        return nominaService.listarPorMunicipio(municipio);
+    public List<Nomina> listarPorMunicipio(@PathVariable String municipio,
+                                           Authentication authentication) {
+        List<Nomina> resultado = nominaService.listarPorMunicipio(municipio);
+        return filtrarSiEmpleado(authentication, resultado);
+    }
+
+    /*
+     * Lista nóminas de un empleado por su ID.
+     * GET /api/nominas/empleado/{idEmpleado}
+     */
+    @GetMapping("/empleado/{idEmpleado}")
+    public ResponseEntity<List<Nomina>> listarPorEmpleado(@PathVariable Long idEmpleado,
+                                                          Authentication authentication) {
+        if (!sesionService.esAdmin(authentication)) {
+            Long miId = sesionService.empleadoActual(authentication)
+                    .map(e -> e.getIdEmpleado())
+                    .orElse(null);
+            if (miId == null || !miId.equals(idEmpleado)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
+        return ResponseEntity.ok(nominaService.listarPorEmpleado(idEmpleado));
+    }
+
+    private List<Nomina> nominasPropias(Authentication authentication) {
+        Long miId = sesionService.empleadoActual(authentication)
+                .map(e -> e.getIdEmpleado())
+                .orElse(null);
+        if (miId == null) {
+            return List.of();
+        }
+        return nominaService.listarPorEmpleado(miId);
+    }
+
+    private List<Nomina> filtrarSiEmpleado(Authentication authentication, List<Nomina> resultado) {
+        if (sesionService.esAdmin(authentication)) {
+            return resultado;
+        }
+        Long miId = sesionService.empleadoActual(authentication)
+                .map(e -> e.getIdEmpleado())
+                .orElse(null);
+        if (miId == null) {
+            return List.of();
+        }
+        return resultado.stream()
+                .filter(n -> n.getEmpleado() != null && miId.equals(n.getEmpleado().getIdEmpleado()))
+                .toList();
+    }
+
+    private boolean esNominaPropia(Authentication authentication, Long idNomina) {
+        Long miId = sesionService.empleadoActual(authentication)
+                .map(e -> e.getIdEmpleado())
+                .orElse(null);
+        if (miId == null) {
+            return false;
+        }
+        return nominaService.buscarPorId(idNomina)
+                .filter(n -> n.getEmpleado() != null && miId.equals(n.getEmpleado().getIdEmpleado()))
+                .isPresent();
     }
 }

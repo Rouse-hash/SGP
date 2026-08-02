@@ -100,6 +100,12 @@ public class NominaServiceImpl implements NominaService {
         return nominaRepository.findByMunicipio(municipio);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<Nomina> listarPorEmpleado(Long idEmpleado) {
+        return nominaRepository.findByEmpleadoIdEmpleado(idEmpleado);
+    }
+
     private Double calcularTotal(Nomina nomina) {
         double base = nomina.getSalarioBase() != null ? nomina.getSalarioBase() : 0;
         double ded = nomina.getDeducciones() != null ? nomina.getDeducciones() : 0;

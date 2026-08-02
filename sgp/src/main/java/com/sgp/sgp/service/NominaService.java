@@ -41,4 +41,9 @@ public interface NominaService {
      * Lista nóminas por municipio (ej: "Villavicencio").
      */
     List<Nomina> listarPorMunicipio(String municipio);
+
+    /*
+     * Lista nóminas de un empleado por su ID.
+     */
+    List<Nomina> listarPorEmpleado(Long idEmpleado);
 }
