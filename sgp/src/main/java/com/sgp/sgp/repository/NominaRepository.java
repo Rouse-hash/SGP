@@ -30,4 +30,7 @@ public interface NominaRepository extends JpaRepository<Nomina, Long> {
 
     @EntityGraph(attributePaths = {"empleado", "contrato"})
     List<Nomina> findByEmpleadoIdEmpleado(Long idEmpleado);
+
+    @EntityGraph(attributePaths = {"empleado", "contrato"})
+    List<Nomina> findByContrato_IdContrato(Long idContrato);
 }

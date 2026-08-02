@@ -2,9 +2,19 @@ package com.sgp.sgp.service;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.sgp.sgp.exception.RecursoNoEncontradoException;
+import com.sgp.sgp.model.Contrato;
 import com.sgp.sgp.model.Empleado;
+import com.sgp.sgp.model.Nomina;
+import com.sgp.sgp.model.Usuario;
+import com.sgp.sgp.repository.ArchivoEmpleadoRepository;
+import com.sgp.sgp.repository.ContratoRepository;
+import com.sgp.sgp.repository.DetalleNominaRepository;
 import com.sgp.sgp.repository.EmpleadoRepository;
+import com.sgp.sgp.repository.NominaRepository;
+import com.sgp.sgp.repository.ReporteNominaRepository;
+import com.sgp.sgp.repository.UsuarioRepository;
 
 /*
     Implementación de la lógica de negocio para Empleado
@@ -18,12 +28,30 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         Repository de empleados para acceder a la base de datos.
     */
     private final EmpleadoRepository empleadoRepository;
+    private final ContratoRepository contratoRepository;
+    private final NominaRepository nominaRepository;
+    private final DetalleNominaRepository detalleNominaRepository;
+    private final ReporteNominaRepository reporteNominaRepository;
+    private final ArchivoEmpleadoRepository archivoEmpleadoRepository;
+    private final UsuarioRepository usuarioRepository;
 
     /*
         Constructor para inyección de dependencias.
     */
-    public EmpleadoServiceImpl(EmpleadoRepository empleadoRepository) {
+    public EmpleadoServiceImpl(EmpleadoRepository empleadoRepository,
+                               ContratoRepository contratoRepository,
+                               NominaRepository nominaRepository,
+                               DetalleNominaRepository detalleNominaRepository,
+                               ReporteNominaRepository reporteNominaRepository,
+                               ArchivoEmpleadoRepository archivoEmpleadoRepository,
+                               UsuarioRepository usuarioRepository) {
         this.empleadoRepository = empleadoRepository;
+        this.contratoRepository = contratoRepository;
+        this.nominaRepository = nominaRepository;
+        this.detalleNominaRepository = detalleNominaRepository;
+        this.reporteNominaRepository = reporteNominaRepository;
+        this.archivoEmpleadoRepository = archivoEmpleadoRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     /*
@@ -78,12 +106,33 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     /*
         Elimina un empleado por ID.
         Si no existe, lanza excepción.
+        Elimina en cascada nóminas (con sus detalles y reportes), contratos,
+        archivos y el usuario vinculado.
     */
     @Override
+    @Transactional
     public void eliminarEmpleado(Long idEmpleado) {
         Empleado existente = empleadoRepository.findById(idEmpleado)
                 .orElseThrow(() -> new RecursoNoEncontradoException(
                         "Empleado no encontrado con ID: " + idEmpleado));
+
+        List<Nomina> nominas = nominaRepository.findByEmpleadoIdEmpleado(idEmpleado);
+        for (Nomina nomina : nominas) {
+            detalleNominaRepository.deleteByNomina_IdNomina(nomina.getIdNomina());
+            reporteNominaRepository.deleteByNomina_IdNomina(nomina.getIdNomina());
+        }
+        nominaRepository.deleteAll(nominas);
+
+        List<Contrato> contratos = contratoRepository.findByEmpleado_IdEmpleado(idEmpleado);
+        contratoRepository.deleteAll(contratos);
+
+        archivoEmpleadoRepository.deleteByIdEmpleado(idEmpleado);
+
+        Usuario usuario = usuarioRepository.findByEmpleado_IdEmpleado(idEmpleado).orElse(null);
+        if (usuario != null) {
+            usuarioRepository.delete(usuario);
+        }
+
         empleadoRepository.delete(existente);
     }
 }

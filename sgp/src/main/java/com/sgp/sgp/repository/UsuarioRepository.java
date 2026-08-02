@@ -19,4 +19,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByCorreo(String correo);
 
     boolean existsByCorreo(String correo);
+
+    @EntityGraph(attributePaths = "empleado")
+    Optional<Usuario> findByEmpleado_IdEmpleado(Long idEmpleado);
 }

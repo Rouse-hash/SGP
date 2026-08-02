@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ArchivoEmpleadoRepository extends JpaRepository<ArchivoEmpleado, Long> {
     List<ArchivoEmpleado> findByIdEmpleadoOrderByFechaSubidaDesc(Long idEmpleado);
+
+    void deleteByIdEmpleado(Long idEmpleado);
 }
