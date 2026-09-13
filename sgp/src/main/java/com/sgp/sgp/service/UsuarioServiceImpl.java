@@ -4,6 +4,7 @@ import com.sgp.sgp.model.Empleado;
 import com.sgp.sgp.model.Usuario;
 import com.sgp.sgp.repository.EmpleadoRepository;
 import com.sgp.sgp.repository.UsuarioRepository;
+import com.sgp.sgp.exception.RecursoDuplicadoException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +44,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario guardarUsuario(Usuario usuario) {
         Empleado empleado = empleadoRepository.findById(usuario.getEmpleado().getIdEmpleado())
                 .orElseThrow(() -> new RuntimeException("Empleado no encontrado con ID: " + usuario.getEmpleado().getIdEmpleado()));
+        validarCorreoNoDuplicado(usuario.getCorreo(), null);
         usuario.setEmpleado(empleado);
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         return usuarioRepository.save(usuario);
@@ -57,6 +59,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         Empleado empleado = empleadoRepository.findById(usuario.getEmpleado().getIdEmpleado())
                 .orElseThrow(() -> new RuntimeException("Empleado no encontrado con ID: " + usuario.getEmpleado().getIdEmpleado()));
 
+        validarCorreoNoDuplicado(usuario.getCorreo(), id);
         existente.setEmpleado(empleado);
         existente.setCorreo(usuario.getCorreo());
         existente.setPassword(passwordEncoder.encode(usuario.getPassword()));
@@ -85,6 +88,22 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional
     public Usuario guardarUsuarioMigrado(Usuario usuario) {
         return usuarioRepository.save(usuario);
+    }
+
+    /*
+        Valida que el correo no esté registrado por otro usuario.
+        Si ya existe, lanza una excepción de recurso duplicado.
+    */
+    private void validarCorreoNoDuplicado(String correo, Long idUsuario) {
+        if (correo == null || correo.isBlank()) {
+            return;
+        }
+        usuarioRepository.findByCorreo(correo)
+                .filter(otro -> idUsuario == null || !otro.getId().equals(idUsuario))
+                .ifPresent(otro -> {
+                    throw new RecursoDuplicadoException(
+                            "El correo electrónico ya se encuentra registrado");
+                });
     }
 }
 

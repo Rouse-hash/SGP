@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.sgp.sgp.exception.RecursoNoEncontradoException;
+import com.sgp.sgp.exception.RecursoDuplicadoException;
 import com.sgp.sgp.model.Contrato;
 import com.sgp.sgp.model.Empleado;
 import com.sgp.sgp.model.Nomina;
@@ -75,9 +76,11 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     /*
         Crea un nuevo empleado.
+        Valida que el número de documento no esté registrado.
     */
     @Override
     public Empleado crearEmpleado(Empleado empleado) {
+        validarDocumentoNoDuplicado(empleado.getNumeroDocumento(), null);
         return empleadoRepository.save(empleado);
     }
 
@@ -91,6 +94,8 @@ public class EmpleadoServiceImpl implements EmpleadoService {
                 .orElseThrow(() -> new RecursoNoEncontradoException(
                         "Empleado no encontrado con ID: " + idEmpleado));
 
+        validarDocumentoNoDuplicado(empleado.getNumeroDocumento(), idEmpleado);
+
         // Actualizar datos básicos
         existente.setNombre(empleado.getNombre());
         existente.setApellidos(empleado.getApellidos());
@@ -101,6 +106,22 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
         // Guardar cambios
         return empleadoRepository.save(existente);
+    }
+
+    /*
+        Valida que el número de documento no esté registrado por otro empleado.
+        Si ya existe, lanza una excepción de recurso duplicado.
+    */
+    private void validarDocumentoNoDuplicado(String numeroDocumento, Long idEmpleado) {
+        if (numeroDocumento == null || numeroDocumento.isBlank()) {
+            return;
+        }
+        empleadoRepository.findByNumeroDocumento(numeroDocumento)
+                .filter(otro -> idEmpleado == null || !otro.getIdEmpleado().equals(idEmpleado))
+                .ifPresent(otro -> {
+                    throw new RecursoDuplicadoException(
+                            "El número de documento ya se encuentra registrado");
+                });
     }
 
     /*

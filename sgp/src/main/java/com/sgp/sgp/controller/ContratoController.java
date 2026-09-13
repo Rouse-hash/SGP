@@ -9,7 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:5173") // Permite que React consuma los endpoints
 @RestController
@@ -39,6 +42,45 @@ public class ContratoController {
         }
         return ResponseEntity.ok(contrato);
     }
+    // ✅ Crear contrato desde la raíz del módulo, el idEmpleado va en el body
+    // POST /api/contratos
+    @PostMapping
+    public ResponseEntity<Contrato> crearContratoRaiz(@RequestBody Map<String, Object> payload) {
+        Object idRaw = payload.get("idEmpleado");
+        if (idRaw == null) {
+            throw new RuntimeException("El campo 'idEmpleado' es obligatorio en el body");
+        }
+        Long idEmpleado = Long.valueOf(idRaw.toString());
+
+        Empleado empleado = empleadoRepository.findById(idEmpleado)
+                .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
+
+        Contrato contrato = new Contrato();
+        contrato.setTipoContrato((String) payload.get("tipoContrato"));
+        contrato.setFechaInicio(parseFecha(payload.get("fechaInicio")));
+        contrato.setFechaFin(parseFecha(payload.get("fechaFin")));
+        Object salarioRaw = payload.get("salario");
+        if (salarioRaw != null) {
+            contrato.setSalario(Double.valueOf(salarioRaw.toString()));
+        }
+        contrato.setEmpleado(empleado);
+
+        Contrato nuevoContrato = contratoRepository.save(contrato);
+        return ResponseEntity.ok(nuevoContrato);
+    }
+
+    private LocalDate parseFecha(Object fecha) {
+        if (fecha == null || fecha.toString().isBlank()) {
+            return null;
+        }
+        String texto = fecha.toString().trim();
+        try {
+            return LocalDate.parse(texto);
+        } catch (Exception e) {
+            return LocalDate.parse(texto, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        }
+    }
+
     // ✅ Crear contrato asociado a un empleado
     @PostMapping("/empleado/{idEmpleado}")
     public ResponseEntity<Contrato> crearContrato(

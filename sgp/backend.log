@@ -9635,3 +9635,1231 @@ Hibernate:
         e1_0.tipo_documento 
     from
         empleado e1_0
+2026-08-01T23:23:32.554-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0 
+    where
+        e1_0.id_empleado=?
+Hibernate: 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0 
+    where
+        e1_0.id_empleado=?
+2026-08-01T23:23:32.578-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        n1_0.id_nomina,
+        n1_0.bonificaciones,
+        n1_0.id_contrato,
+        c1_0.id_contrato,
+        c1_0.id_empleado,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato,
+        n1_0.deducciones,
+        n1_0.departamento,
+        n1_0.id_empleado,
+        e3_0.id_empleado,
+        e3_0.apellidos,
+        e3_0.estado_civil,
+        e3_0.fecha_nacimiento,
+        e3_0.nombre,
+        e3_0.numero_documento,
+        e3_0.tipo_documento,
+        n1_0.estado,
+        n1_0.fecha_pago,
+        n1_0.municipio,
+        n1_0.salario_base,
+        n1_0.total_pagado 
+    from
+        nomina n1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=n1_0.id_empleado 
+    join
+        contrato c1_0 
+            on c1_0.id_contrato=n1_0.id_contrato 
+    join
+        empleado e3_0 
+            on e3_0.id_empleado=n1_0.id_empleado 
+    where
+        e1_0.id_empleado=?
+Hibernate: 
+    select
+        n1_0.id_nomina,
+        n1_0.bonificaciones,
+        n1_0.id_contrato,
+        c1_0.id_contrato,
+        c1_0.id_empleado,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato,
+        n1_0.deducciones,
+        n1_0.departamento,
+        n1_0.id_empleado,
+        e3_0.id_empleado,
+        e3_0.apellidos,
+        e3_0.estado_civil,
+        e3_0.fecha_nacimiento,
+        e3_0.nombre,
+        e3_0.numero_documento,
+        e3_0.tipo_documento,
+        n1_0.estado,
+        n1_0.fecha_pago,
+        n1_0.municipio,
+        n1_0.salario_base,
+        n1_0.total_pagado 
+    from
+        nomina n1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=n1_0.id_empleado 
+    join
+        contrato c1_0 
+            on c1_0.id_contrato=n1_0.id_contrato 
+    join
+        empleado e3_0 
+            on e3_0.id_empleado=n1_0.id_empleado 
+    where
+        e1_0.id_empleado=?
+2026-08-01T23:23:32.586-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        dn1_0.id_detalle,
+        dn1_0.descripcion,
+        dn1_0.estado,
+        dn1_0.fecha,
+        dn1_0.id_nomina,
+        dn1_0.tipo_concepto,
+        dn1_0.valor 
+    from
+        detalle_nomina dn1_0 
+    left join
+        nomina n1_0 
+            on n1_0.id_nomina=dn1_0.id_nomina 
+    where
+        n1_0.id_nomina=?
+Hibernate: 
+    select
+        dn1_0.id_detalle,
+        dn1_0.descripcion,
+        dn1_0.estado,
+        dn1_0.fecha,
+        dn1_0.id_nomina,
+        dn1_0.tipo_concepto,
+        dn1_0.valor 
+    from
+        detalle_nomina dn1_0 
+    left join
+        nomina n1_0 
+            on n1_0.id_nomina=dn1_0.id_nomina 
+    where
+        n1_0.id_nomina=?
+2026-08-01T23:23:32.597-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        rn1_0.id_reporte,
+        rn1_0.id_empleado,
+        rn1_0.fecha_generacion,
+        rn1_0.id_nomina,
+        rn1_0.total_bonificaciones,
+        rn1_0.total_deducciones,
+        rn1_0.total_pagado,
+        rn1_0.total_salario 
+    from
+        reporte_nomina rn1_0 
+    left join
+        nomina n1_0 
+            on n1_0.id_nomina=rn1_0.id_nomina 
+    where
+        n1_0.id_nomina=?
+Hibernate: 
+    select
+        rn1_0.id_reporte,
+        rn1_0.id_empleado,
+        rn1_0.fecha_generacion,
+        rn1_0.id_nomina,
+        rn1_0.total_bonificaciones,
+        rn1_0.total_deducciones,
+        rn1_0.total_pagado,
+        rn1_0.total_salario 
+    from
+        reporte_nomina rn1_0 
+    left join
+        nomina n1_0 
+            on n1_0.id_nomina=rn1_0.id_nomina 
+    where
+        n1_0.id_nomina=?
+2026-08-01T23:23:32.609-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        c1_0.id_contrato,
+        e2_0.id_empleado,
+        e2_0.apellidos,
+        e2_0.estado_civil,
+        e2_0.fecha_nacimiento,
+        e2_0.nombre,
+        e2_0.numero_documento,
+        e2_0.tipo_documento,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=c1_0.id_empleado 
+    left join
+        empleado e2_0 
+            on e2_0.id_empleado=c1_0.id_empleado 
+    where
+        e1_0.id_empleado=?
+Hibernate: 
+    select
+        c1_0.id_contrato,
+        e2_0.id_empleado,
+        e2_0.apellidos,
+        e2_0.estado_civil,
+        e2_0.fecha_nacimiento,
+        e2_0.nombre,
+        e2_0.numero_documento,
+        e2_0.tipo_documento,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=c1_0.id_empleado 
+    left join
+        empleado e2_0 
+            on e2_0.id_empleado=c1_0.id_empleado 
+    where
+        e1_0.id_empleado=?
+2026-08-01T23:23:32.620-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        ae1_0.id,
+        ae1_0.fecha_subida,
+        ae1_0.id_empleado,
+        ae1_0.mime_type,
+        ae1_0.nombre_archivo,
+        ae1_0.nombre_original,
+        ae1_0.ruta,
+        ae1_0.tamano,
+        ae1_0.tipo 
+    from
+        archivo_empleado ae1_0 
+    where
+        ae1_0.id_empleado=?
+Hibernate: 
+    select
+        ae1_0.id,
+        ae1_0.fecha_subida,
+        ae1_0.id_empleado,
+        ae1_0.mime_type,
+        ae1_0.nombre_archivo,
+        ae1_0.nombre_original,
+        ae1_0.ruta,
+        ae1_0.tamano,
+        ae1_0.tipo 
+    from
+        archivo_empleado ae1_0 
+    where
+        ae1_0.id_empleado=?
+2026-08-01T23:23:32.631-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.activo,
+        u1_0.correo,
+        e2_0.id_empleado,
+        e2_0.apellidos,
+        e2_0.estado_civil,
+        e2_0.fecha_nacimiento,
+        e2_0.nombre,
+        e2_0.numero_documento,
+        e2_0.tipo_documento,
+        u1_0.password,
+        u1_0.rol 
+    from
+        usuario u1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=u1_0.id_empleado 
+    left join
+        empleado e2_0 
+            on e2_0.id_empleado=u1_0.id_empleado 
+    where
+        e1_0.id_empleado=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.activo,
+        u1_0.correo,
+        e2_0.id_empleado,
+        e2_0.apellidos,
+        e2_0.estado_civil,
+        e2_0.fecha_nacimiento,
+        e2_0.nombre,
+        e2_0.numero_documento,
+        e2_0.tipo_documento,
+        u1_0.password,
+        u1_0.rol 
+    from
+        usuario u1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=u1_0.id_empleado 
+    left join
+        empleado e2_0 
+            on e2_0.id_empleado=u1_0.id_empleado 
+    where
+        e1_0.id_empleado=?
+2026-08-01T23:23:32.639-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        c1_0.id_empleado,
+        c1_0.id_contrato,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    where
+        c1_0.id_empleado=?
+Hibernate: 
+    select
+        c1_0.id_empleado,
+        c1_0.id_contrato,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    where
+        c1_0.id_empleado=?
+2026-08-01T23:23:32.646-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    delete 
+    from
+        detalle_nomina 
+    where
+        id_detalle=?
+Hibernate: 
+    delete 
+    from
+        detalle_nomina 
+    where
+        id_detalle=?
+2026-08-01T23:23:32.652-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    delete 
+    from
+        detalle_nomina 
+    where
+        id_detalle=?
+Hibernate: 
+    delete 
+    from
+        detalle_nomina 
+    where
+        id_detalle=?
+2026-08-01T23:23:32.656-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    delete 
+    from
+        detalle_nomina 
+    where
+        id_detalle=?
+Hibernate: 
+    delete 
+    from
+        detalle_nomina 
+    where
+        id_detalle=?
+2026-08-01T23:23:32.661-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    delete 
+    from
+        reporte_nomina 
+    where
+        id_reporte=?
+Hibernate: 
+    delete 
+    from
+        reporte_nomina 
+    where
+        id_reporte=?
+2026-08-01T23:23:32.666-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    delete 
+    from
+        nomina 
+    where
+        id_nomina=?
+Hibernate: 
+    delete 
+    from
+        nomina 
+    where
+        id_nomina=?
+2026-08-01T23:23:32.671-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    delete 
+    from
+        contrato 
+    where
+        id_contrato=?
+Hibernate: 
+    delete 
+    from
+        contrato 
+    where
+        id_contrato=?
+2026-08-01T23:23:32.676-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    delete 
+    from
+        archivo_empleado 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        archivo_empleado 
+    where
+        id=?
+2026-08-01T23:23:32.682-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    delete 
+    from
+        usuario 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        usuario 
+    where
+        id=?
+2026-08-01T23:23:32.687-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    delete 
+    from
+        empleado 
+    where
+        id_empleado=?
+Hibernate: 
+    delete 
+    from
+        empleado 
+    where
+        id_empleado=?
+2026-08-01T23:23:32.713-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+Hibernate: 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+2026-08-01T23:23:34.441-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        c1_0.id_contrato,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=c1_0.id_empleado
+Hibernate: 
+    select
+        c1_0.id_contrato,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=c1_0.id_empleado
+2026-08-01T23:23:34.456-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        c1_0.id_contrato,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=c1_0.id_empleado
+Hibernate: 
+    select
+        c1_0.id_contrato,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=c1_0.id_empleado
+2026-08-01T23:23:34.458-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-7] org.hibernate.SQL                        : 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+Hibernate: 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+2026-08-01T23:23:34.478-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-8] org.hibernate.SQL                        : 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+Hibernate: 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+2026-08-01T23:23:36.948-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.activo,
+        u1_0.correo,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        u1_0.password,
+        u1_0.rol 
+    from
+        usuario u1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=u1_0.id_empleado
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.activo,
+        u1_0.correo,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        u1_0.password,
+        u1_0.rol 
+    from
+        usuario u1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=u1_0.id_empleado
+2026-08-01T23:23:36.967-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-9] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.activo,
+        u1_0.correo,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        u1_0.password,
+        u1_0.rol 
+    from
+        usuario u1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=u1_0.id_empleado
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.activo,
+        u1_0.correo,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        u1_0.password,
+        u1_0.rol 
+    from
+        usuario u1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=u1_0.id_empleado
+2026-08-01T23:23:36.970-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+Hibernate: 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+2026-08-01T23:23:36.996-05:00 DEBUG 3432 --- [sgp] [io-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+Hibernate: 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+2026-08-01T23:23:39.191-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        n1_0.id_nomina,
+        n1_0.bonificaciones,
+        n1_0.id_contrato,
+        c1_0.id_contrato,
+        c1_0.id_empleado,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato,
+        n1_0.deducciones,
+        n1_0.departamento,
+        n1_0.id_empleado,
+        e2_0.id_empleado,
+        e2_0.apellidos,
+        e2_0.estado_civil,
+        e2_0.fecha_nacimiento,
+        e2_0.nombre,
+        e2_0.numero_documento,
+        e2_0.tipo_documento,
+        n1_0.estado,
+        n1_0.fecha_pago,
+        n1_0.municipio,
+        n1_0.salario_base,
+        n1_0.total_pagado 
+    from
+        nomina n1_0 
+    join
+        contrato c1_0 
+            on c1_0.id_contrato=n1_0.id_contrato 
+    join
+        empleado e2_0 
+            on e2_0.id_empleado=n1_0.id_empleado
+Hibernate: 
+    select
+        n1_0.id_nomina,
+        n1_0.bonificaciones,
+        n1_0.id_contrato,
+        c1_0.id_contrato,
+        c1_0.id_empleado,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato,
+        n1_0.deducciones,
+        n1_0.departamento,
+        n1_0.id_empleado,
+        e2_0.id_empleado,
+        e2_0.apellidos,
+        e2_0.estado_civil,
+        e2_0.fecha_nacimiento,
+        e2_0.nombre,
+        e2_0.numero_documento,
+        e2_0.tipo_documento,
+        n1_0.estado,
+        n1_0.fecha_pago,
+        n1_0.municipio,
+        n1_0.salario_base,
+        n1_0.total_pagado 
+    from
+        nomina n1_0 
+    join
+        contrato c1_0 
+            on c1_0.id_contrato=n1_0.id_contrato 
+    join
+        empleado e2_0 
+            on e2_0.id_empleado=n1_0.id_empleado
+2026-08-01T23:23:39.209-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        n1_0.id_nomina,
+        n1_0.bonificaciones,
+        n1_0.id_contrato,
+        c1_0.id_contrato,
+        c1_0.id_empleado,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato,
+        n1_0.deducciones,
+        n1_0.departamento,
+        n1_0.id_empleado,
+        e2_0.id_empleado,
+        e2_0.apellidos,
+        e2_0.estado_civil,
+        e2_0.fecha_nacimiento,
+        e2_0.nombre,
+        e2_0.numero_documento,
+        e2_0.tipo_documento,
+        n1_0.estado,
+        n1_0.fecha_pago,
+        n1_0.municipio,
+        n1_0.salario_base,
+        n1_0.total_pagado 
+    from
+        nomina n1_0 
+    join
+        contrato c1_0 
+            on c1_0.id_contrato=n1_0.id_contrato 
+    join
+        empleado e2_0 
+            on e2_0.id_empleado=n1_0.id_empleado
+Hibernate: 
+    select
+        n1_0.id_nomina,
+        n1_0.bonificaciones,
+        n1_0.id_contrato,
+        c1_0.id_contrato,
+        c1_0.id_empleado,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato,
+        n1_0.deducciones,
+        n1_0.departamento,
+        n1_0.id_empleado,
+        e2_0.id_empleado,
+        e2_0.apellidos,
+        e2_0.estado_civil,
+        e2_0.fecha_nacimiento,
+        e2_0.nombre,
+        e2_0.numero_documento,
+        e2_0.tipo_documento,
+        n1_0.estado,
+        n1_0.fecha_pago,
+        n1_0.municipio,
+        n1_0.salario_base,
+        n1_0.total_pagado 
+    from
+        nomina n1_0 
+    join
+        contrato c1_0 
+            on c1_0.id_contrato=n1_0.id_contrato 
+    join
+        empleado e2_0 
+            on e2_0.id_empleado=n1_0.id_empleado
+2026-08-01T23:23:39.666-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+Hibernate: 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+2026-08-01T23:23:39.695-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-8] org.hibernate.SQL                        : 
+    select
+        c1_0.id_contrato,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=c1_0.id_empleado
+Hibernate: 
+    select
+        c1_0.id_contrato,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=c1_0.id_empleado
+2026-08-01T23:23:39.796-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+Hibernate: 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+2026-08-01T23:23:39.821-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-9] org.hibernate.SQL                        : 
+    select
+        c1_0.id_contrato,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=c1_0.id_empleado
+Hibernate: 
+    select
+        c1_0.id_contrato,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    left join
+        empleado e1_0 
+            on e1_0.id_empleado=c1_0.id_empleado
+2026-08-01T23:24:49.419-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        empleado e1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        empleado e1_0
+2026-08-01T23:24:49.429-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        contrato c1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        contrato c1_0
+2026-08-01T23:24:49.433-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        usuario u1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        usuario u1_0
+2026-08-01T23:24:49.437-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        nomina n1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        nomina n1_0
+2026-08-01T23:24:49.440-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        coalesce(sum(n1_0.total_pagado), 0) 
+    from
+        nomina n1_0
+Hibernate: 
+    select
+        coalesce(sum(n1_0.total_pagado), 0) 
+    from
+        nomina n1_0
+2026-08-01T23:24:49.444-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0 
+    order by
+        e1_0.id_empleado desc 
+    limit
+        ?
+Hibernate: 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0 
+    order by
+        e1_0.id_empleado desc 
+    limit
+        ?
+2026-08-01T23:24:49.447-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        c1_0.id_contrato,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    join
+        empleado e1_0 
+            on e1_0.id_empleado=c1_0.id_empleado
+Hibernate: 
+    select
+        c1_0.id_contrato,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    join
+        empleado e1_0 
+            on e1_0.id_empleado=c1_0.id_empleado
+2026-08-01T23:24:49.466-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        empleado e1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        empleado e1_0
+2026-08-01T23:24:49.475-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        contrato c1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        contrato c1_0
+2026-08-01T23:24:49.481-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        usuario u1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        usuario u1_0
+2026-08-01T23:24:49.485-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        nomina n1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        nomina n1_0
+2026-08-01T23:24:49.489-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        coalesce(sum(n1_0.total_pagado), 0) 
+    from
+        nomina n1_0
+Hibernate: 
+    select
+        coalesce(sum(n1_0.total_pagado), 0) 
+    from
+        nomina n1_0
+2026-08-01T23:24:49.495-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0 
+    order by
+        e1_0.id_empleado desc 
+    limit
+        ?
+Hibernate: 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0 
+    order by
+        e1_0.id_empleado desc 
+    limit
+        ?
+2026-08-01T23:24:49.500-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        c1_0.id_contrato,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    join
+        empleado e1_0 
+            on e1_0.id_empleado=c1_0.id_empleado
+Hibernate: 
+    select
+        c1_0.id_contrato,
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento,
+        c1_0.fecha_fin,
+        c1_0.fecha_inicio,
+        c1_0.salario,
+        c1_0.tipo_contrato 
+    from
+        contrato c1_0 
+    join
+        empleado e1_0 
+            on e1_0.id_empleado=c1_0.id_empleado
+2026-08-01T23:24:51.423-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+Hibernate: 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+2026-08-01T23:24:51.441-05:00 DEBUG 3432 --- [sgp] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+Hibernate: 
+    select
+        e1_0.id_empleado,
+        e1_0.apellidos,
+        e1_0.estado_civil,
+        e1_0.fecha_nacimiento,
+        e1_0.nombre,
+        e1_0.numero_documento,
+        e1_0.tipo_documento 
+    from
+        empleado e1_0
+2026-08-02T01:28:43.608-05:00  WARN 3432 --- [sgp] [l-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=26m20s578ms39µs600ns).
+2026-08-02T08:46:18.943-05:00  WARN 3432 --- [sgp] [l-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=7h17m37s539ms567µs).
