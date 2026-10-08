@@ -16,7 +16,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/archivos")
-@CrossOrigin(origins = "http://localhost:5173")
 public class ArchivoController {
 
     private final ArchivoService archivoService;
@@ -40,13 +39,8 @@ public class ArchivoController {
     @GetMapping("/empleado/{idEmpleado}")
     public ResponseEntity<List<ArchivoEmpleado>> listarArchivos(@PathVariable Long idEmpleado,
                                                                 Authentication authentication) {
-        if (!sesionService.esAdmin(authentication)) {
-            Long miId = sesionService.empleadoActual(authentication)
-                    .map(e -> e.getIdEmpleado())
-                    .orElse(null);
-            if (miId == null || !miId.equals(idEmpleado)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
+        if (!sesionService.puedeAccederEmpleado(authentication, idEmpleado)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.ok(archivoService.listarArchivos(idEmpleado));
     }

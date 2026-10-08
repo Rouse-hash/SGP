@@ -23,10 +23,6 @@ import java.util.List;
 
 // Define la ruta base del controlador
 @RequestMapping("/api/usuarios")
-
-// Permite que el Frontend desarrollado en React
-// pueda consumir este servicio web.
-@CrossOrigin(origins = "http://localhost:5173")
 public class UsuarioController {
 
     /**

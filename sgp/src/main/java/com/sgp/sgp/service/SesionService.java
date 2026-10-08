@@ -35,4 +35,38 @@ public class SesionService {
         return authentication != null && authentication.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
+
+    /*
+     * ID del empleado vinculado al usuario autenticado (correo del JWT).
+     */
+    public Optional<Long> idEmpleadoActual(Authentication authentication) {
+        return empleadoActual(authentication).map(Empleado::getIdEmpleado);
+    }
+
+    /*
+     * Indica si el usuario autenticado puede acceder a los datos de un empleado:
+     * los ADMIN acceden a cualquiera, los demás solo a su propio empleado.
+     */
+    public boolean puedeAccederEmpleado(Authentication authentication, Long idEmpleado) {
+        if (esAdmin(authentication)) {
+            return true;
+        }
+        return idEmpleadoActual(authentication)
+                .filter(miId -> miId.equals(idEmpleado))
+                .isPresent();
+    }
+
+    /*
+     * Indica si el usuario autenticado puede buscar por un documento:
+     * los ADMIN buscan cualquiera, los demás solo el suyo.
+     */
+    public boolean puedeAccederDocumento(Authentication authentication, String numeroDocumento) {
+        if (esAdmin(authentication)) {
+            return true;
+        }
+        return empleadoActual(authentication)
+                .map(Empleado::getNumeroDocumento)
+                .filter(miDocumento -> miDocumento.equals(numeroDocumento))
+                .isPresent();
+    }
 }

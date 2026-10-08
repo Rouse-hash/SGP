@@ -9,7 +9,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/publica")
-@CrossOrigin(origins = "http://localhost:5173")
 public class ApiPublicaController {
 
     private final ApiPublicaService apiPublicaService;

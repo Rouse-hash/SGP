@@ -62,7 +62,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         validarCorreoNoDuplicado(usuario.getCorreo(), id);
         existente.setEmpleado(empleado);
         existente.setCorreo(usuario.getCorreo());
-        existente.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        if (usuario.getPassword() != null && !usuario.getPassword().isBlank()) {
+            existente.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        }
         existente.setRol(usuario.getRol());
         existente.setActivo(usuario.getActivo());
 

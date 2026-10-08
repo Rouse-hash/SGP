@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/dashboard")
-@CrossOrigin(origins = "http://localhost:5173")
 public class DashboardController {
 
     private final DashboardService dashboardService;
@@ -23,9 +22,7 @@ public class DashboardController {
     @GetMapping
     public ResponseEntity<DashboardResponse> obtenerDashboard(Authentication authentication) {
         if (!sesionService.esAdmin(authentication)) {
-            Long miId = sesionService.empleadoActual(authentication)
-                    .map(e -> e.getIdEmpleado())
-                    .orElse(null);
+            Long miId = sesionService.idEmpleadoActual(authentication).orElse(null);
             return ResponseEntity.ok(dashboardService.obtenerDashboardEmpleado(miId));
         }
         return ResponseEntity.ok(dashboardService.obtenerDashboard());

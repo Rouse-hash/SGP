@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/nominas")
-@CrossOrigin(origins = "http://localhost:5173")
 public class NominaController {
 
     private final NominaService nominaService;
@@ -114,21 +113,14 @@ public class NominaController {
     @GetMapping("/empleado/{idEmpleado}")
     public ResponseEntity<List<Nomina>> listarPorEmpleado(@PathVariable Long idEmpleado,
                                                           Authentication authentication) {
-        if (!sesionService.esAdmin(authentication)) {
-            Long miId = sesionService.empleadoActual(authentication)
-                    .map(e -> e.getIdEmpleado())
-                    .orElse(null);
-            if (miId == null || !miId.equals(idEmpleado)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
+        if (!sesionService.puedeAccederEmpleado(authentication, idEmpleado)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.ok(nominaService.listarPorEmpleado(idEmpleado));
     }
 
     private List<Nomina> nominasPropias(Authentication authentication) {
-        Long miId = sesionService.empleadoActual(authentication)
-                .map(e -> e.getIdEmpleado())
-                .orElse(null);
+        Long miId = sesionService.idEmpleadoActual(authentication).orElse(null);
         if (miId == null) {
             return List.of();
         }
@@ -139,9 +131,7 @@ public class NominaController {
         if (sesionService.esAdmin(authentication)) {
             return resultado;
         }
-        Long miId = sesionService.empleadoActual(authentication)
-                .map(e -> e.getIdEmpleado())
-                .orElse(null);
+        Long miId = sesionService.idEmpleadoActual(authentication).orElse(null);
         if (miId == null) {
             return List.of();
         }
@@ -151,9 +141,7 @@ public class NominaController {
     }
 
     private boolean esNominaPropia(Authentication authentication, Long idNomina) {
-        Long miId = sesionService.empleadoActual(authentication)
-                .map(e -> e.getIdEmpleado())
-                .orElse(null);
+        Long miId = sesionService.idEmpleadoActual(authentication).orElse(null);
         if (miId == null) {
             return false;
         }

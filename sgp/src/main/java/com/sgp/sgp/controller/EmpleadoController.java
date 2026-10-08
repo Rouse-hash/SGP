@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/empleados")
 public class EmpleadoController {
@@ -59,13 +58,8 @@ public class EmpleadoController {
     @GetMapping("/{idEmpleado}")
     public ResponseEntity<Empleado> buscarEmpleadoPorId(@PathVariable Long idEmpleado,
                                                         Authentication authentication) {
-        if (!sesionService.esAdmin(authentication)) {
-            Long miId = sesionService.empleadoActual(authentication)
-                    .map(Empleado::getIdEmpleado)
-                    .orElse(null);
-            if (miId == null || !miId.equals(idEmpleado)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
+        if (!sesionService.puedeAccederEmpleado(authentication, idEmpleado)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         Empleado empleado = empleadoService.buscarEmpleadoPorId(idEmpleado);
         return ResponseEntity.ok(empleado);
@@ -74,13 +68,8 @@ public class EmpleadoController {
     @GetMapping("/documento/{numeroDocumento}")
     public ResponseEntity<Empleado> buscarPorDocumento(@PathVariable String numeroDocumento,
                                                        Authentication authentication) {
-        if (!sesionService.esAdmin(authentication)) {
-            String miDocumento = sesionService.empleadoActual(authentication)
-                    .map(Empleado::getNumeroDocumento)
-                    .orElse(null);
-            if (miDocumento == null || !miDocumento.equals(numeroDocumento)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
+        if (!sesionService.puedeAccederDocumento(authentication, numeroDocumento)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return empleadoRepository.findByNumeroDocumento(numeroDocumento)
                 .map(ResponseEntity::ok)
@@ -90,13 +79,8 @@ public class EmpleadoController {
     @GetMapping("/{id}/resumen")
     public ResponseEntity<ResumenEmpleadoDTO> obtenerResumen(@PathVariable Long id,
                                                              Authentication authentication) {
-        if (!sesionService.esAdmin(authentication)) {
-            Long miId = sesionService.empleadoActual(authentication)
-                    .map(Empleado::getIdEmpleado)
-                    .orElse(null);
-            if (miId == null || !miId.equals(id)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
+        if (!sesionService.puedeAccederEmpleado(authentication, id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         Empleado empleado = empleadoService.buscarEmpleadoPorId(id);
         List<Contrato> contratos = contratoRepository.findByEmpleado_IdEmpleado(id);

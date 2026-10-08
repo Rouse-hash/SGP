@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Archivos subidos por los usuarios ###
+/uploads/
+
+### Logs de la aplicación ###
+*.log
+/logs/

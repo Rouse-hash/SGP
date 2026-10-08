@@ -1,5 +1,7 @@
 package com.sgp.sgp.security;
 
+import com.sgp.sgp.model.Usuario;
+import com.sgp.sgp.repository.UsuarioRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -23,9 +25,12 @@ import java.util.List;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final SecretKey key;
+    private final UsuarioRepository usuarioRepository;
 
-    public JwtFilter(@Value("${jwt.secret}") String secret) {
+    public JwtFilter(@Value("${jwt.secret}") String secret,
+                     UsuarioRepository usuarioRepository) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Override
@@ -51,10 +56,21 @@ public class JwtFilter extends OncePerRequestFilter {
                     .getPayload();
 
             String correo = claims.getSubject();
-            String rol = claims.get("rol", String.class);
 
+            // El token solo es válido si el usuario sigue existiendo y activo
+            Usuario usuario = usuarioRepository.findByCorreo(correo)
+                    .filter(u -> Boolean.TRUE.equals(u.getActivo()))
+                    .orElse(null);
+
+            if (usuario == null) {
+                SecurityContextHolder.clearContext();
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            // El rol se toma de la base de datos, no del token
             List<SimpleGrantedAuthority> authorities = List.of(
-                    new SimpleGrantedAuthority("ROLE_" + rol)
+                    new SimpleGrantedAuthority("ROLE_" + usuario.getRol())
             );
 
             UsernamePasswordAuthenticationToken authentication =

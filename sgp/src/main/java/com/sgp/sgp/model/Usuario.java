@@ -1,6 +1,7 @@
 package com.sgp.sgp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +25,8 @@ public class Usuario {
     @Column(unique = true)
     private String correo;
 
-    @NotBlank
+    // Se acepta en las peticiones entrantes pero nunca se envía en las respuestas
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @NotBlank
